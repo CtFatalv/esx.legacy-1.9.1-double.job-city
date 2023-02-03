@@ -40,10 +40,6 @@ Config.PoliceStations = {
 			vector3(452.6, -992.8, 30.6)
 		},
 
-		Armories = {
-			vector3(451.7, -980.1, 30.6)
-		},
-
 		Vehicles = {
 			{
 				Spawner = vector3(454.6, -1017.4, 28.4),
@@ -133,20 +129,22 @@ Config.AuthorizedVehicles = {
 		recruit = {},
 
 		officer = {
-			{model = 'police3', price = 20000}
+			{model = 'police3', price = 0}
 		},
 
 		sergeant = {
-			{model = 'policet', price = 18500},
-			{model = 'policeb', price = 30500}
+			{model = 'policet', price = 0},
+			{model = 'policeb', price = 0}
 		},
 
 		lieutenant = {
-			{model = 'riot', price = 70000},
-			{model = 'fbi2', price = 60000}
+			{model = 'riot', price = 0},
+			{model = 'fbi2', price = 0}
 		},
 
-		boss = {}
+		boss = {
+			{model = 'police3', price = 0}
+        }
 	},
 
 	helicopter = {
@@ -157,11 +155,11 @@ Config.AuthorizedVehicles = {
 		sergeant = {},
 
 		lieutenant = {
-			{model = 'polmav', props = {modLivery = 0}, price = 200000}
+			{model = 'polmav', props = {modLivery = 0}, price = 0}
 		},
 
 		boss = {
-			{model = 'polmav', props = {modLivery = 0}, price = 100000}
+			{model = 'polmav', props = {modLivery = 0}, price = 0}
 		}
 	}
 }

@@ -1240,19 +1240,6 @@ CreateThread(function()
 					end
 				end
 
-				for i=1, #v.Armories, 1 do
-					local distance = #(playerCoords - v.Armories[i])
-
-					if distance < Config.DrawDistance then
-						DrawMarker(Config.MarkerType.Armories, v.Armories[i], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.5, 0.5, Config.MarkerColor.r, Config.MarkerColor.g, Config.MarkerColor.b, 100, false, true, 2, true, false, false, false)
-						Sleep = 0
-
-						if distance < Config.MarkerSize.x then
-							isInMarker, currentStation, currentPart, currentPartNum = true, k, 'Armory', i
-						end
-					end
-				end
-
 				for i=1, #v.Vehicles, 1 do
 					local distance = #(playerCoords - v.Vehicles[i].Spawner)
 
