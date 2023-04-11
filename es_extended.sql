@@ -510,7 +510,7 @@ CREATE TABLE `users` (
   `identifier` varchar(46) NOT NULL,
   `accounts` longtext DEFAULT NULL,
   `group` varchar(50) DEFAULT 'user',
-  `inventory` varchar(512) DEFAULT '{"bread":10,"water":10}',
+  `inventory` longtext DEFAULT '{"bread":10,"water":10}',
   `job` varchar(20) DEFAULT 'unemployed',
   `job_grade` int(11) DEFAULT 0,
   `job2` varchar(20) DEFAULT 'unemployed2',
