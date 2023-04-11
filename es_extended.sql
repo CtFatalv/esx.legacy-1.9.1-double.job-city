@@ -475,6 +475,19 @@ CREATE TABLE `owned_vehicles` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `ox_doorlock`
+--
+
+CREATE TABLE IF NOT EXISTS `ox_doorlock` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `rented_vehicles`
 --
 
