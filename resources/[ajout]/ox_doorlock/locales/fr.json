@@ -13,6 +13,5 @@
   "cannot_unlock": "Impossible de déverrouiller la porte",
   "cannot_lock": "Impossible de verrouiller la porte",
   "create_modify_lock": "Ajouter / Modifier une serrure",
-  "add_door_textui": "**Créer une porte**  \nIntéragir avec [LMB]  \nAnnuler avec [RMB]",
-  "command_closest": "Ouvrez l'interface utilisateur directement à la serrure de porte la plus proche"
+  "add_door_textui": "**Créer une porte**  \nIntéragir avec [LMB]  \nAnnuler avec [RMB]"
 }

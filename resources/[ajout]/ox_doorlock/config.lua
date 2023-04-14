@@ -24,4 +24,4 @@ Config.PlayerAceAuthorised = false
 Config.LockDifficulty = { 'easy', 'easy', 'medium' }
 
 -- Allow lockpicks to be used to lock an already unlocked door.
-Config.CanPickUnlockedDoors = false
+Config.CanPickUnlockedDoors = true

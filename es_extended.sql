@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : mar. 31 jan. 2023 à 18:42
--- Version du serveur : 10.9.4-MariaDB-1:10.9.4+maria~ubu2204
--- Version de PHP : 8.0.27
+-- Généré le : ven. 14 avr. 2023 à 17:28
+-- Version du serveur : 10.11.2-MariaDB-1:10.11.2+maria~ubu2204
+-- Version de PHP : 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `es_extended`
+-- Base de données : `test`
 --
 
 -- --------------------------------------------------------
@@ -59,18 +59,6 @@ CREATE TABLE `addon_account_data` (
   `money` int(11) NOT NULL,
   `owner` varchar(46) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `addon_account_data`
---
-
-INSERT INTO `addon_account_data` (`id`, `account_name`, `money`, `owner`) VALUES
-(1, 'society_ambulance', 0, NULL),
-(2, 'society_banker', 0, NULL),
-(3, 'society_cardealer', 0, NULL),
-(4, 'society_mechanic', 0, NULL),
-(5, 'society_police', 0, NULL),
-(6, 'society_taxi', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -192,17 +180,6 @@ CREATE TABLE `datastore_data` (
   `data` longtext DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Déchargement des données de la table `datastore_data`
---
-
-INSERT INTO `datastore_data` (`id`, `name`, `owner`, `data`) VALUES
-(1, 'society_ambulance', NULL, '\'{}\''),
-(2, 'society_mechanic', NULL, '\'{}\''),
-(3, 'society_police', NULL, '\'{}\''),
-(4, 'society_taxi', NULL, '\'{}\''),
-(5, 'property', NULL, '{}');
-
 -- --------------------------------------------------------
 
 --
@@ -273,59 +250,6 @@ INSERT INTO `fine_types` (`id`, `label`, `amount`, `category`) VALUES
 (50, 'Murder of an LEO', 30000, 3),
 (51, 'Involuntary manslaughter', 1800, 3),
 (52, 'Fraud', 2000, 2);
-
--- --------------------------------------------------------
-
---
--- Structure de la table `items`
---
-
-CREATE TABLE `items` (
-  `name` varchar(50) NOT NULL,
-  `label` varchar(50) NOT NULL,
-  `weight` int(11) NOT NULL DEFAULT 1,
-  `rare` tinyint(4) NOT NULL DEFAULT 0,
-  `can_remove` tinyint(4) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `items`
---
-
-INSERT INTO `items` (`name`, `label`, `weight`, `rare`, `can_remove`) VALUES
-('alive_chicken', 'Poulet vivant', 1, 0, 1),
-('bandage', 'Bandage', 2, 0, 1),
-('blowpipe', 'Chalumeau', 2, 0, 1),
-('bread', 'Pain', 1, 0, 1),
-('cannabis', 'Cannabis', 3, 0, 1),
-('carokit', 'kit de carrosserie', 3, 0, 1),
-('carotool', 'Outil de carrosseri', 2, 0, 1),
-('clothe', 'Habit', 1, 0, 1),
-('copper', 'Cuivre', 1, 0, 1),
-('cutted_wood', 'Bois coupé', 1, 0, 1),
-('diamond', 'Diamant', 1, 0, 1),
-('essence', 'Gaz', 1, 0, 1),
-('fabric', 'Chiffon', 1, 0, 1),
-('fish', 'Poisson', 1, 0, 1),
-('fixkit', 'Kit de réparation', 3, 0, 1),
-('fixtool', 'Outil d eréparation', 2, 0, 1),
-('gazbottle', 'Bouteille de gaz', 2, 0, 1),
-('gold', 'Or', 1, 0, 1),
-('iron', 'Fer', 1, 0, 1),
-('marijuana', 'Marijuana', 2, 0, 1),
-('medikit', 'trousse de soin', 2, 0, 1),
-('packaged_chicken', 'Filet de poulet', 1, 0, 1),
-('packaged_plank', 'Planche de bois', 1, 0, 1),
-('petrol', 'huile', 1, 0, 1),
-('petrol_raffin', 'Huile raffiné', 1, 0, 1),
-('phone', 'Phone', 1, 0, 1),
-('radio', 'Radio', 1, 0, 1),
-('slaughtered_chicken', 'Poulet abbatu', 1, 0, 1),
-('stone', 'Pierre', 1, 0, 1),
-('washed_stone', 'Pierre lavé', 1, 0, 1),
-('water', 'Eau', 1, 0, 1),
-('wood', 'Bois', 1, 0, 1),
-('wool', 'Laine', 1, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -441,7 +365,7 @@ INSERT INTO `licenses` (`type`, `label`) VALUES
 ('drive', 'Drivers License'),
 ('drive_bike', 'Motorcycle License'),
 ('drive_truck', 'Commercial Drivers License'),
-('weed_processing', 'Weed Processing License');
+('weapon', 'Weapon License');
 
 -- --------------------------------------------------------
 
@@ -469,7 +393,9 @@ CREATE TABLE `owned_vehicles` (
   `stored` tinyint(4) NOT NULL DEFAULT 0,
   `parking` varchar(60) DEFAULT NULL,
   `pound` varchar(60) DEFAULT NULL,
-  `mileage` float DEFAULT 0
+  `mileage` float DEFAULT 0,
+  `glovebox` longtext DEFAULT NULL,
+  `trunk` longtext DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -478,12 +404,24 @@ CREATE TABLE `owned_vehicles` (
 -- Structure de la table `ox_doorlock`
 --
 
-CREATE TABLE IF NOT EXISTS `ox_doorlock` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `data` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+CREATE TABLE `ox_doorlock` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `ox_inventory`
+--
+
+CREATE TABLE `ox_inventory` (
+  `owner` varchar(46) DEFAULT NULL,
+  `name` varchar(100) NOT NULL,
+  `data` longtext DEFAULT NULL,
+  `lastupdated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -956,12 +894,6 @@ ALTER TABLE `fine_types`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `items`
---
-ALTER TABLE `items`
-  ADD PRIMARY KEY (`name`);
-
---
 -- Index pour la table `jobs`
 --
 ALTER TABLE `jobs`
@@ -991,6 +923,18 @@ ALTER TABLE `multicharacter_slots`
 --
 ALTER TABLE `owned_vehicles`
   ADD PRIMARY KEY (`plate`);
+
+--
+-- Index pour la table `ox_doorlock`
+--
+ALTER TABLE `ox_doorlock`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `ox_inventory`
+--
+ALTER TABLE `ox_inventory`
+  ADD UNIQUE KEY `owner` (`owner`,`name`);
 
 --
 -- Index pour la table `rented_vehicles`
@@ -1051,7 +995,7 @@ ALTER TABLE `whitelist`
 -- AUTO_INCREMENT pour la table `addon_account_data`
 --
 ALTER TABLE `addon_account_data`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `addon_inventory_items`
@@ -1081,7 +1025,7 @@ ALTER TABLE `cardealer_vehicles`
 -- AUTO_INCREMENT pour la table `datastore_data`
 --
 ALTER TABLE `datastore_data`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `fine_types`
@@ -1094,6 +1038,12 @@ ALTER TABLE `fine_types`
 --
 ALTER TABLE `job_grades`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+
+--
+-- AUTO_INCREMENT pour la table `ox_doorlock`
+--
+ALTER TABLE `ox_doorlock`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `society_moneywash`
