@@ -253,6 +253,59 @@ INSERT INTO `fine_types` (`id`, `label`, `amount`, `category`) VALUES
 
 -- --------------------------------------------------------
 
+CREATE TABLE `management_outfits` (
+  `id` int(11) NOT NULL,
+  `job_name` varchar(50) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `minrank` int(11) NOT NULL DEFAULT 0,
+  `name` varchar(50) NOT NULL DEFAULT 'Cool Outfit',
+  `gender` varchar(50) NOT NULL DEFAULT 'male',
+  `model` varchar(50) DEFAULT NULL,
+  `props` varchar(1000) DEFAULT NULL,
+  `components` varchar(1500) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `playerskins`
+--
+
+CREATE TABLE `playerskins` (
+  `id` int(11) NOT NULL,
+  `citizenid` varchar(255) NOT NULL,
+  `model` varchar(255) NOT NULL,
+  `skin` text NOT NULL,
+  `active` tinyint(4) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `player_outfits`
+--
+
+CREATE TABLE `player_outfits` (
+  `id` int(11) NOT NULL,
+  `citizenid` varchar(50) DEFAULT NULL,
+  `outfitname` varchar(50) NOT NULL DEFAULT '0',
+  `model` varchar(50) DEFAULT NULL,
+  `props` varchar(1000) DEFAULT NULL,
+  `components` varchar(1500) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `player_outfit_codes`
+--
+
+CREATE TABLE `player_outfit_codes` (
+  `id` int(11) NOT NULL,
+  `outfitid` int(11) NOT NULL,
+  `code` varchar(50) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Structure de la table `jobs`
 --
@@ -1074,6 +1127,64 @@ ALTER TABLE `user_licenses`
 -- AUTO_INCREMENT pour la table `vehicle_sold`
 --
 ALTER TABLE `vehicle_sold`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+--
+-- Index pour la table `management_outfits`
+--
+ALTER TABLE `management_outfits`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `playerskins`
+--
+ALTER TABLE `playerskins`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `citizenid` (`citizenid`),
+  ADD KEY `active` (`active`);
+
+--
+-- Index pour la table `player_outfits`
+--
+ALTER TABLE `player_outfits`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `citizenid_outfitname_model` (`citizenid`,`outfitname`,`model`),
+  ADD KEY `citizenid` (`citizenid`);
+
+--
+-- Index pour la table `player_outfit_codes`
+--
+ALTER TABLE `player_outfit_codes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_player_outfit_codes_player_outfits` (`outfitid`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `management_outfits`
+--
+ALTER TABLE `management_outfits`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT pour la table `playerskins`
+--
+ALTER TABLE `playerskins`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `player_outfits`
+--
+ALTER TABLE `player_outfits`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT pour la table `player_outfit_codes`
+--
+ALTER TABLE `player_outfit_codes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
