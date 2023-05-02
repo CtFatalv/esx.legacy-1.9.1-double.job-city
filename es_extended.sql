@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : ven. 28 avr. 2023 à 16:13
+-- Généré le : mar. 02 mai 2023 à 13:05
 -- Version du serveur : 10.11.2-MariaDB-1:10.11.2+maria~ubu2204
 -- Version de PHP : 8.1.18
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `s153_James`
+-- Base de données : `test`
 --
 
 -- --------------------------------------------------------
@@ -253,59 +253,6 @@ INSERT INTO `fine_types` (`id`, `label`, `amount`, `category`) VALUES
 
 -- --------------------------------------------------------
 
-CREATE TABLE `management_outfits` (
-  `id` int(11) NOT NULL,
-  `job_name` varchar(50) NOT NULL,
-  `type` varchar(50) NOT NULL,
-  `minrank` int(11) NOT NULL DEFAULT 0,
-  `name` varchar(50) NOT NULL DEFAULT 'Cool Outfit',
-  `gender` varchar(50) NOT NULL DEFAULT 'male',
-  `model` varchar(50) DEFAULT NULL,
-  `props` varchar(1000) DEFAULT NULL,
-  `components` varchar(1500) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `playerskins`
---
-
-CREATE TABLE `playerskins` (
-  `id` int(11) NOT NULL,
-  `citizenid` varchar(255) NOT NULL,
-  `model` varchar(255) NOT NULL,
-  `skin` text NOT NULL,
-  `active` tinyint(4) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `player_outfits`
---
-
-CREATE TABLE `player_outfits` (
-  `id` int(11) NOT NULL,
-  `citizenid` varchar(50) DEFAULT NULL,
-  `outfitname` varchar(50) NOT NULL DEFAULT '0',
-  `model` varchar(50) DEFAULT NULL,
-  `props` varchar(1000) DEFAULT NULL,
-  `components` varchar(1500) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `player_outfit_codes`
---
-
-CREATE TABLE `player_outfit_codes` (
-  `id` int(11) NOT NULL,
-  `outfitid` int(11) NOT NULL,
-  `code` varchar(50) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 --
 -- Structure de la table `jobs`
 --
@@ -424,6 +371,24 @@ INSERT INTO `licenses` (`type`, `label`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `management_outfits`
+--
+
+CREATE TABLE `management_outfits` (
+  `id` int(11) NOT NULL,
+  `job_name` varchar(50) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `minrank` int(11) NOT NULL DEFAULT 0,
+  `name` varchar(50) NOT NULL DEFAULT 'Cool Outfit',
+  `gender` varchar(50) NOT NULL DEFAULT 'male',
+  `model` varchar(50) DEFAULT NULL,
+  `props` varchar(1000) DEFAULT NULL,
+  `components` varchar(1500) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `multicharacter_slots`
 --
 
@@ -475,6 +440,47 @@ CREATE TABLE `ox_inventory` (
   `name` varchar(100) NOT NULL,
   `data` longtext DEFAULT NULL,
   `lastupdated` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `playerskins`
+--
+
+CREATE TABLE `playerskins` (
+  `id` int(11) NOT NULL,
+  `citizenid` varchar(255) NOT NULL,
+  `model` varchar(255) NOT NULL,
+  `skin` text NOT NULL,
+  `active` tinyint(4) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `player_outfits`
+--
+
+CREATE TABLE `player_outfits` (
+  `id` int(11) NOT NULL,
+  `citizenid` varchar(50) DEFAULT NULL,
+  `outfitname` varchar(50) NOT NULL DEFAULT '0',
+  `model` varchar(50) DEFAULT NULL,
+  `props` varchar(1000) DEFAULT NULL,
+  `components` varchar(1500) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `player_outfit_codes`
+--
+
+CREATE TABLE `player_outfit_codes` (
+  `id` int(11) NOT NULL,
+  `outfitid` int(11) NOT NULL,
+  `code` varchar(50) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -966,6 +972,12 @@ ALTER TABLE `licenses`
   ADD PRIMARY KEY (`type`);
 
 --
+-- Index pour la table `management_outfits`
+--
+ALTER TABLE `management_outfits`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Index pour la table `multicharacter_slots`
 --
 ALTER TABLE `multicharacter_slots`
@@ -989,6 +1001,29 @@ ALTER TABLE `ox_doorlock`
 --
 ALTER TABLE `ox_inventory`
   ADD UNIQUE KEY `owner` (`owner`,`name`);
+
+--
+-- Index pour la table `playerskins`
+--
+ALTER TABLE `playerskins`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `citizenid` (`citizenid`),
+  ADD KEY `active` (`active`);
+
+--
+-- Index pour la table `player_outfits`
+--
+ALTER TABLE `player_outfits`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `citizenid_outfitname_model` (`citizenid`,`outfitname`,`model`),
+  ADD KEY `citizenid` (`citizenid`);
+
+--
+-- Index pour la table `player_outfit_codes`
+--
+ALTER TABLE `player_outfit_codes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_player_outfit_codes_player_outfits` (`outfitid`);
 
 --
 -- Index pour la table `rented_vehicles`
@@ -1094,10 +1129,34 @@ ALTER TABLE `job_grades`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
+-- AUTO_INCREMENT pour la table `management_outfits`
+--
+ALTER TABLE `management_outfits`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
 -- AUTO_INCREMENT pour la table `ox_doorlock`
 --
 ALTER TABLE `ox_doorlock`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `playerskins`
+--
+ALTER TABLE `playerskins`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `player_outfits`
+--
+ALTER TABLE `player_outfits`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT pour la table `player_outfit_codes`
+--
+ALTER TABLE `player_outfit_codes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `society_moneywash`
@@ -1127,64 +1186,6 @@ ALTER TABLE `user_licenses`
 -- AUTO_INCREMENT pour la table `vehicle_sold`
 --
 ALTER TABLE `vehicle_sold`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-COMMIT;
-
---
--- Index pour la table `management_outfits`
---
-ALTER TABLE `management_outfits`
-  ADD PRIMARY KEY (`id`);
-
---
--- Index pour la table `playerskins`
---
-ALTER TABLE `playerskins`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `citizenid` (`citizenid`),
-  ADD KEY `active` (`active`);
-
---
--- Index pour la table `player_outfits`
---
-ALTER TABLE `player_outfits`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `citizenid_outfitname_model` (`citizenid`,`outfitname`,`model`),
-  ADD KEY `citizenid` (`citizenid`);
-
---
--- Index pour la table `player_outfit_codes`
---
-ALTER TABLE `player_outfit_codes`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `FK_player_outfit_codes_player_outfits` (`outfitid`);
-
---
--- AUTO_INCREMENT pour les tables déchargées
---
-
---
--- AUTO_INCREMENT pour la table `management_outfits`
---
-ALTER TABLE `management_outfits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
-
---
--- AUTO_INCREMENT pour la table `playerskins`
---
-ALTER TABLE `playerskins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `player_outfits`
---
-ALTER TABLE `player_outfits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
-
---
--- AUTO_INCREMENT pour la table `player_outfit_codes`
---
-ALTER TABLE `player_outfit_codes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
