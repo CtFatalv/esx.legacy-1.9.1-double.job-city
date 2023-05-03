@@ -621,6 +621,15 @@ function OpenMenu(isPedMenu, menuType, menuData)
             description = _L("jobOutfits.description"),
             menu = workOutfitsMenuID
         }
+
+        local changeOutfitMenuID = "illenium_appearance_change_outfit_menu"
+        RegisterWorkOutfitsListMenu(workOutfitsMenuID, mainMenuID, menuData)
+
+        menuItems[#menuItems + 1] = {
+            title = _L("outfits.change.title"),
+            description = _L("outfits.change.pDescription"),
+            menu = changeOutfitMenuID
+        }
     end
     mainMenu.options = menuItems
 

@@ -14,7 +14,7 @@ Config.RCoreTattoosCompatibility = false
 
 Config.AsynchronousLoading = false -- Change this to false if you want the NUI data to load before displaying the appearance UI
 
-Config.UseTarget = false
+Config.UseTarget = true
 
 Config.TextUIOptions = {
     position = "left-center"
@@ -37,7 +37,7 @@ Config.EnablePedMenu = true
 Config.PedMenuGroup = "group.admin"
 
 Config.ShowNearestShopOnly = false
-Config.HideRadar = false -- Hides the minimap while the appearance menu is open
+Config.HideRadar = true -- Hides the minimap while the appearance menu is open
 Config.NearestShopBlipUpdateDelay = 10000
 
 Config.InvincibleDuringCustomization = true
@@ -58,7 +58,7 @@ Config.GenderBasedOnPed = true
 
 Config.AlwaysKeepProps = false
 
-Config.PersistUniforms = false -- Keeps Job / Gang Outfits on player reconnects / logout
+Config.PersistUniforms = true -- Keeps Job / Gang Outfits on player reconnects / logout
 Config.OnDutyOnlyClothingRooms = false -- Set to `true` to make the clothing rooms accessible only to players who are On Duty
 
 Config.BossManagedOutfits = false -- Allows Job / Gang bosses to manage their own job / gang outfits
@@ -576,8 +576,8 @@ Config.ClothingRooms = {
 
 Config.PlayerOutfitRooms = {
     -- Sample outfit room config
---[[    {
-        job = "police",
+    {
+        job = "",
         coords = vector4(287.28, -573.41, 43.16, 79.61),
         size = vector3(4, 4, 4),
         rotation = 45,
@@ -589,9 +589,9 @@ Config.PlayerOutfitRooms = {
             vector3(289.0, -574.75, 43.16)
         },
         citizenIDs = {
-            "BHH65156"
+            --"char1:3069bd0212b6d515f7464a32ee0084ee0222d130"
         }
-    }]]--
+    }
 }
 
 Config.Outfits = {

@@ -1,6 +1,6 @@
 Config = {
 	-- Get notified when a new version releases
-	versionCheck = true,
+	versionCheck = false,
 
 	-- Enable support for qtarget / ox_target
 	qtarget = true,

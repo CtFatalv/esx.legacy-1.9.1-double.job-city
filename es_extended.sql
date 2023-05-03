@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : mar. 02 mai 2023 à 13:05
+-- Généré le : mer. 03 mai 2023 à 18:25
 -- Version du serveur : 10.11.2-MariaDB-1:10.11.2+maria~ubu2204
 -- Version de PHP : 8.1.18
 
@@ -100,6 +100,23 @@ CREATE TABLE `addon_inventory_items` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `baninfo`
+--
+
+CREATE TABLE `baninfo` (
+  `id` int(11) NOT NULL,
+  `license` varchar(50) DEFAULT NULL,
+  `identifier` varchar(46) DEFAULT NULL,
+  `liveid` varchar(21) DEFAULT NULL,
+  `xblid` varchar(21) DEFAULT NULL,
+  `discord` varchar(30) DEFAULT NULL,
+  `playerip` varchar(25) DEFAULT NULL,
+  `playername` varchar(32) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `banking`
 --
 
@@ -111,6 +128,50 @@ CREATE TABLE `banking` (
   `ID` int(11) NOT NULL,
   `balance` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `banlist`
+--
+
+CREATE TABLE `banlist` (
+  `license` varchar(50) NOT NULL,
+  `identifier` varchar(46) DEFAULT NULL,
+  `liveid` varchar(21) DEFAULT NULL,
+  `xblid` varchar(21) DEFAULT NULL,
+  `discord` varchar(30) DEFAULT NULL,
+  `playerip` varchar(25) DEFAULT NULL,
+  `targetplayername` varchar(32) DEFAULT NULL,
+  `sourceplayername` varchar(32) DEFAULT NULL,
+  `reason` varchar(255) NOT NULL,
+  `timeat` varchar(50) NOT NULL,
+  `expiration` varchar(50) NOT NULL,
+  `permanent` int(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `banlisthistory`
+--
+
+CREATE TABLE `banlisthistory` (
+  `id` int(11) NOT NULL,
+  `license` varchar(50) DEFAULT NULL,
+  `identifier` varchar(46) DEFAULT NULL,
+  `liveid` varchar(21) DEFAULT NULL,
+  `xblid` varchar(21) DEFAULT NULL,
+  `discord` varchar(30) DEFAULT NULL,
+  `playerip` varchar(25) DEFAULT NULL,
+  `targetplayername` varchar(32) DEFAULT NULL,
+  `sourceplayername` varchar(32) DEFAULT NULL,
+  `reason` varchar(255) NOT NULL,
+  `timeat` int(11) NOT NULL,
+  `added` varchar(40) NOT NULL,
+  `expiration` int(11) NOT NULL,
+  `permanent` int(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
 
@@ -916,10 +977,28 @@ ALTER TABLE `addon_inventory_items`
   ADD KEY `index_addon_inventory_inventory_name` (`inventory_name`);
 
 --
+-- Index pour la table `baninfo`
+--
+ALTER TABLE `baninfo`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Index pour la table `banking`
 --
 ALTER TABLE `banking`
   ADD PRIMARY KEY (`ID`);
+
+--
+-- Index pour la table `banlist`
+--
+ALTER TABLE `banlist`
+  ADD PRIMARY KEY (`license`);
+
+--
+-- Index pour la table `banlisthistory`
+--
+ALTER TABLE `banlisthistory`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Index pour la table `billing`
@@ -1093,10 +1172,22 @@ ALTER TABLE `addon_inventory_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT pour la table `baninfo`
+--
+ALTER TABLE `baninfo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT pour la table `banking`
 --
 ALTER TABLE `banking`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `banlisthistory`
+--
+ALTER TABLE `banlisthistory`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `billing`
@@ -1132,7 +1223,7 @@ ALTER TABLE `job_grades`
 -- AUTO_INCREMENT pour la table `management_outfits`
 --
 ALTER TABLE `management_outfits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `ox_doorlock`
@@ -1150,7 +1241,7 @@ ALTER TABLE `playerskins`
 -- AUTO_INCREMENT pour la table `player_outfits`
 --
 ALTER TABLE `player_outfits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `player_outfit_codes`

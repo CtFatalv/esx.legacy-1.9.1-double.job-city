@@ -1,5 +1,5 @@
 Config = {
-    Lang = GetConvar('esx:locale', 'en'):upper(),
+    Locale = GetConvar('esx:locale', 'en'),
     Colors = {
         Info = {
             ['money-text-color'] = "#4d6973",
@@ -47,16 +47,16 @@ Config = {
         Voice = false,
         Money = false,
         Info = false,
-        IndicatorSound = false, --vehicle index sound
-        VehicleHandlers = false, -- Engine toggle, Indicator lights
+        IndicatorSound = false,
+        VehicleHandlers = false,
         MinimapOnFoot = false,
-        Needle = true,
-        StatusPercent = false,
-        CenterStatuses = false,
-        PassengerSpeedo = true
+        Needle = false,
+        StatusPercent = true,
+        CenterStatuses = true
     },
     Default = {
         ServerLogo = 'https://esx.s3.fr-par.scw.cloud/blanc-800x800.png',
         Kmh = true,
+        PassengerSpeedo = false
     }
 }

@@ -11,7 +11,7 @@ local function typeof(var)
     end
 end
 
-function LoadJobOutfit(oData)
+function LoadJobOutfit(oData, appearance)
     local ped = cache.ped
 
     local data = oData.outfitData
@@ -118,11 +118,8 @@ function LoadJobOutfit(oData)
     end
 
     if Config.PersistUniforms and length > 1 then
-        TriggerServerEvent("illenium-appearance:server:syncUniform", {
-            jobName = oData.jobName,
-            gender = oData.gender,
-            label = oData.name
-        })
+		local appearance = client.getPedAppearance(cache.ped)
+        TriggerServerEvent("illenium-appearance:server:saveAppearance", appearance)
     end
 end
 

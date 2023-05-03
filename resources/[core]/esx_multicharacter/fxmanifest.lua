@@ -5,7 +5,7 @@ description 'Official Multicharacter System For ESX Legacy'
 version '1.9.0'
 lua54 'yes'
 
-dependencies {'es_extended', 'esx_context', 'esx_identity', 'esx_skin'}
+dependencies {'es_extended', 'esx_context'}
 
 shared_scripts {'@es_extended/imports.lua', '@es_extended/locale.lua', 'locales/*.lua', 'config.lua'}
 

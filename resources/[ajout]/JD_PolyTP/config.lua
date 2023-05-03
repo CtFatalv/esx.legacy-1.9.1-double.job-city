@@ -32,8 +32,33 @@ Config.TPZones = {
         destination = 'morgue_outside',
         ShellWeatherSync = false,
     },
+    ['fbi_1'] = {
+        label = "FBI",
+        icon = 'fas fa-square-caret-up',
+        pos = vector4(139.44, -764.04, 45.76, 170.4),
+        destination = 'fbi_2',
+        ShellWeatherSync = false,
+    },
+    ['fbi_2'] = {
+        label = "FBI",
+        icon = 'fas fa-square-caret-down',
+        pos = vector4(136.68, -763.04, 242.16, 172.4),
+        destination = 'fbi_1',
+        ShellWeatherSync = false,
+    },
+    ['lux_outside'] = {
+        label = "Interieur Lux",
+        icon = 'fas fa-square-caret-up',
+        pos = vector4(-816.92, -692.64, 28.08, 267.8),
+        destination = 'lux_inside',
+        ShellWeatherSync = false,
+    },
+    ['lux_inside'] = {
+        label = "Exterieur Lux",
+        icon = 'fas fa-square-caret-down',
+        pos = vector4(-814.92, -682.44, 123.4, 277.04),
+        destination = 'lux_outside',
+        ShellWeatherSync = false,
+    },
+    
 }
-
--- PRODUCED BY JackDUpModZ 2021/2022 
--- V1.0
--- https://discord.gg/qvWktZPgnQ

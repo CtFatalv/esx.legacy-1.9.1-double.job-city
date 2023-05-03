@@ -26,6 +26,27 @@ return {
 				action = function(slot)
 					print('You squeezed the burger :(')
 				end
+			},
+			{
+				label = 'What do you call a vegan burger?',
+				group = 'Hamburger Puns',
+				action = function(slot)
+					print('A misteak.')
+				end
+			},
+			{
+				label = 'What do frogs like to eat with their hamburgers?',
+				group = 'Hamburger Puns',
+				action = function(slot)
+					print('French flies.')
+				end
+			},
+			{
+				label = 'Why were the burger and fries running?',
+				group = 'Hamburger Puns',
+				action = function(slot)
+					print('Because they\'re fast food.')
+				end
 			}
 		},
 		consume = 0.3
@@ -193,208 +214,5 @@ return {
 	['scrapmetal'] = {
 		label = 'Scrap Metal',
 		weight = 80,
-	},
-
-	["alive_chicken"] = {
-		label = "Poulet vivant",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["blowpipe"] = {
-		label = "Chalumeau",
-		weight = 2,
-		stack = true,
-		close = true,
-	},
-
-	["bread"] = {
-		label = "Pain",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["cannabis"] = {
-		label = "Cannabis",
-		weight = 3,
-		stack = true,
-		close = true,
-	},
-
-	["carokit"] = {
-		label = "kit de carrosserie",
-		weight = 3,
-		stack = true,
-		close = true,
-	},
-
-	["carotool"] = {
-		label = "Outil de carrosseri",
-		weight = 2,
-		stack = true,
-		close = true,
-	},
-
-	["clothe"] = {
-		label = "Habit",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["copper"] = {
-		label = "Cuivre",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["cutted_wood"] = {
-		label = "Bois coupé",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["diamond"] = {
-		label = "Diamant",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["essence"] = {
-		label = "Gaz",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["fabric"] = {
-		label = "Chiffon",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["fish"] = {
-		label = "Poisson",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["fixkit"] = {
-		label = "Kit de réparation",
-		weight = 3,
-		stack = true,
-		close = true,
-	},
-
-	["fixtool"] = {
-		label = "Outil d eréparation",
-		weight = 2,
-		stack = true,
-		close = true,
-	},
-
-	["gazbottle"] = {
-		label = "Bouteille de gaz",
-		weight = 2,
-		stack = true,
-		close = true,
-	},
-
-	["gold"] = {
-		label = "Or",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["iron"] = {
-		label = "Fer",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["marijuana"] = {
-		label = "Marijuana",
-		weight = 2,
-		stack = true,
-		close = true,
-	},
-
-	["medikit"] = {
-		label = "trousse de soin",
-		weight = 2,
-		stack = true,
-		close = true,
-	},
-
-	["packaged_chicken"] = {
-		label = "Filet de poulet",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["packaged_plank"] = {
-		label = "Planche de bois",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["petrol"] = {
-		label = "huile",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["petrol_raffin"] = {
-		label = "Huile raffiné",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["slaughtered_chicken"] = {
-		label = "Poulet abbatu",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["stone"] = {
-		label = "Pierre",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["washed_stone"] = {
-		label = "Pierre lavé",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["wood"] = {
-		label = "Bois",
-		weight = 1,
-		stack = true,
-		close = true,
-	},
-
-	["wool"] = {
-		label = "Laine",
-		weight = 1,
-		stack = true,
-		close = true,
 	},
 }
