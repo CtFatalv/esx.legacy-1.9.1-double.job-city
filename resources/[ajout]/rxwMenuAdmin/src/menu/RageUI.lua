@@ -3,9 +3,6 @@
 --- Created by Dylan Malandain.
 --- DateTime: 21/04/2019 21:20
 ---
-
-print("[^1Auteur^0] : ^4Rayan Waize#7272 & Watson^0")
-
 ---round
 ---@param num number
 ---@param numDecimalPlaces number

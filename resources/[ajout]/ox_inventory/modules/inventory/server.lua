@@ -1531,19 +1531,18 @@ lib.callback.register('ox_inventory:swapItems', function(source, data)
 	local fromRef = ('%s:%s'):format(fromInventory.id, data.fromSlot)
 	local toRef = ('%s:%s'):format(toInventory.id, data.toSlot)
 
-	-- while activeSlots[fromRef] or activeSlots[toRef] do
-	-- 	Wait(0)
-	-- end
-
-	if activeSlots[fromRef] or activeSlots[toRef] then return false end
-
-	activeSlots[fromRef] = true
-	activeSlots[toRef] = true
-
-	local _ <close> = defer(function()
-		activeSlots[fromRef] = nil
-		activeSlots[toRef] = nil
-	end)
+	if activeSlots[fromRef] or activeSlots[toRef] then
+		return false, {
+			{
+				item = toInventory.items[data.toSlot] or { slot = data.toSlot },
+				inventory = toInventory.id
+			},
+			{
+				item = fromInventory.items[data.fromSlot] or { slot = data.fromSlot },
+				inventory = fromInventory.id
+			}
+		}
+	end
 
 	local sameInventory = fromInventory.id == toInventory.id
 	local fromOtherPlayer = fromInventory.player and fromInventory ~= playerInventory
@@ -1559,8 +1558,29 @@ lib.callback.register('ox_inventory:swapItems', function(source, data)
 		end
 	end
 
+	activeSlots[fromRef] = true
+	activeSlots[toRef] = true
+
+	local _ <close> = defer(function()
+		activeSlots[fromRef] = nil
+		activeSlots[toRef] = nil
+	end)
+
 	if toInventory and fromInventory and (fromInventory.id ~= toInventory.id or data.fromSlot ~= data.toSlot) then
 		local fromData = fromInventory.items[data.fromSlot]
+
+		if not fromData then
+			return false, {
+				{
+					item = { slot = data.fromSlot },
+					inventory = fromInventory.id
+				},
+				{
+					item = toData or { slot = data.toSlot },
+					inventory = toInventory.id
+				}
+			}
+		end
 
 		if fromData and (not fromData.metadata.container or fromData.metadata.container and toInventory.type ~= 'container') then
 			if data.count > fromData.count then data.count = fromData.count end
@@ -1730,11 +1750,6 @@ lib.callback.register('ox_inventory:swapItems', function(source, data)
 			local items = {}
 
 			if fromInventory.player and not fromOtherPlayer then
-				items[#items + 1] = {
-					item = fromData or { slot = data.fromSlot },
-					inventory = fromInventory.id
-				}
-
 				if toInventory.type == 'container' and containerItem then
 					items[#items + 1] = {
 						item = containerItem,
@@ -1744,11 +1759,6 @@ lib.callback.register('ox_inventory:swapItems', function(source, data)
 			end
 
 			if toInventory.player and not toOtherPlayer then
-				items[#items + 1] = {
-					item = toData or { slot = data.toSlot },
-					inventory = toInventory.id
-				}
-
 				if fromInventory.type == 'container' and containerItem then
 					items[#items + 1] = {
 						item = containerItem,
@@ -1773,36 +1783,36 @@ lib.callback.register('ox_inventory:swapItems', function(source, data)
 						item = fromInventory.items[data.fromSlot] or { slot = data.fromSlot },
 						inventory = fromInventory.id
 					}
-				}, { left = fromInventory.weight }, fromInventory ~= playerInventory)
+				}, { left = fromInventory.weight }, true)
 			else
 				toInventory:syncSlotsWithClients({
 					{
 						item = toInventory.items[data.toSlot] or { slot = data.toSlot },
 						inventory = toInventory.id
 					}
-				}, { left = toInventory.weight }, toInventory ~= playerInventory)
+				}, { left = toInventory.weight }, true)
 
 				fromInventory:syncSlotsWithClients({
 					{
 						item = fromInventory.items[data.fromSlot] or { slot = data.fromSlot },
 						inventory = fromInventory.id
 					}
-				}, { left = fromInventory.weight }, fromInventory ~= playerInventory)
+				}, { left = fromInventory.weight }, true)
 			end
 
 			local resp
 
 			if next(items) then
 				resp = { weight = playerInventory.weight, items = items }
+			end
 
-				if server.syncInventory then
-					if fromInventory.player then
-						server.syncInventory(fromInventory)
-					end
+			if server.syncInventory then
+				if fromInventory.player then
+					server.syncInventory(fromInventory)
+				end
 
-					if toInventory.player and not sameInventory then
-						server.syncInventory(toInventory)
-					end
+				if toInventory.player and not sameInventory then
+					server.syncInventory(toInventory)
 				end
 			end
 
@@ -2177,7 +2187,7 @@ RegisterServerEvent('ox_inventory:giveItem', function(slot, target, count)
 	end
 end)
 
-RegisterServerEvent('ox_inventory:updateWeapon', function(action, value, slot, specialAmmo)
+local function updateWeapon(source, action, value, slot, specialAmmo)
 	local inventory = Inventories[source]
 
 	if not inventory then return end
@@ -2191,15 +2201,19 @@ RegisterServerEvent('ox_inventory:updateWeapon', function(action, value, slot, s
 
 	if type == 'table' and action == 'component' then
 		local item = inventory.items[value.slot]
+
 		if item then
 			if item.metadata.components then
 				for k, v in pairs(item.metadata.components) do
 					if v == value.component then
+						if not Inventory.AddItem(inventory, value.component, 1) then return end
+
 						table.remove(item.metadata.components, k)
-						Inventory.AddItem(inventory, value.component, 1)
-						return inventory:syncSlotsWithPlayer({
+						inventory:syncSlotsWithPlayer({
 							{ item = item }
 						}, inventory.weight)
+
+						return true
 					end
 				end
 			end
@@ -2220,26 +2234,26 @@ RegisterServerEvent('ox_inventory:updateWeapon', function(action, value, slot, s
 				local ammo = Items(weapon.name).ammoname
 				local diff = value - weapon.metadata.ammo
 
-				if Inventory.RemoveItem(inventory, ammo, diff, specialAmmo) then
-					weapon.metadata.ammo = value
-					weapon.metadata.specialAmmo = specialAmmo
-					weapon.weight = Inventory.SlotWeight(item, weapon)
-				end
+				if not Inventory.RemoveItem(inventory, ammo, diff, specialAmmo) then return end
+
+				weapon.metadata.ammo = value
+				weapon.metadata.specialAmmo = specialAmmo
+				weapon.weight = Inventory.SlotWeight(item, weapon)
 			elseif action == 'throw' then
-				Inventory.RemoveItem(inventory, weapon.name, 1, weapon.metadata, weapon.slot)
+				if not Inventory.RemoveItem(inventory, weapon.name, 1, weapon.metadata, weapon.slot) then return end
 			elseif action == 'component' then
 				if type == 'number' then
-					if Inventory.AddItem(inventory, weapon.metadata.components[value], 1) then
-						table.remove(weapon.metadata.components, value)
-						weapon.weight = Inventory.SlotWeight(item, weapon)
-					end
+					if not Inventory.AddItem(inventory, weapon.metadata.components[value], 1) then return false end
+
+					table.remove(weapon.metadata.components, value)
+					weapon.weight = Inventory.SlotWeight(item, weapon)
 				elseif type == 'string' then
 					local component = inventory.items[tonumber(value)]
 
-					if Inventory.RemoveItem(inventory, component.name, 1) then
-						table.insert(weapon.metadata.components, component.name)
-						weapon.weight = Inventory.SlotWeight(item, weapon)
-					end
+					if not Inventory.RemoveItem(inventory, component.name, 1) then return false end
+
+					table.insert(weapon.metadata.components, component.name)
+					weapon.weight = Inventory.SlotWeight(item, weapon)
 				end
 			elseif action == 'ammo' then
 				if item.hash == `WEAPON_FIREEXTINGUISHER` or item.hash == `WEAPON_PETROLCAN` or item.hash == `WEAPON_HAZARDCAN` or item.hash == `WEAPON_FERTILIZERCAN` then
@@ -2262,8 +2276,16 @@ RegisterServerEvent('ox_inventory:updateWeapon', function(action, value, slot, s
 			end
 
 			if server.syncInventory then server.syncInventory(inventory) end
+
+			return true
 		end
 	end
+end
+
+lib.callback.register('ox_inventory:updateWeapon', updateWeapon)
+
+RegisterNetEvent('ox_inventory:updateWeapon', function(action, value, slot, specialAmmo)
+	updateWeapon(source, action, value, slot, specialAmmo)
 end)
 
 lib.callback.register('ox_inventory:removeAmmoFromWeapon', function(source, slot)

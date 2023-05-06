@@ -47,8 +47,8 @@ local function onStoreEnter(data)
             lib.showTextUI(prefix .. string.format(_L("textUI.barber"), Config.BarberCost), Config.TextUIOptions)
         elseif currentZone.name == "tattoo" then
             lib.showTextUI(prefix .. string.format(_L("textUI.tattoo"), Config.TattooCost), Config.TextUIOptions)
-        elseif currentZone.name == "surgeon" then
-            lib.showTextUI(prefix .. string.format(_L("textUI.surgeon"), Config.SurgeonCost), Config.TextUIOptions)
+        --elseif currentZone.name == "surgeon" then
+            --lib.showTextUI(prefix .. string.format(_L("textUI.surgeon"), Config.SurgeonCost), Config.TextUIOptions)
         end
         Radial.AddOption(currentZone)
     end
@@ -162,8 +162,8 @@ local function ZonesLoop()
                     OpenBarberShop()
                 elseif currentZone.name == "tattoo" then
                     OpenTattooShop()
-                elseif currentZone.name == "surgeon" then
-                    OpenSurgeonShop()
+                --elseif currentZone.name == "surgeon" then
+                    --OpenSurgeonShop()
                 end
             end
         end

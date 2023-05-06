@@ -596,11 +596,11 @@ function menuAdmin()
 
                 RageUI.Separator("~o~Gestion Météo")
 
-                RageUI.ButtonWithStyle("Soleil", "Vous permets de le soleil sur la ville", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
+                RageUI.ButtonWithStyle("Soleil", "Rend le ciel ensoleillé", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
                     if Selected then
-                        ExecuteCommand('time 10 00')
-                        ExecuteCommand('weather extrasunny')
-                        TriggerServerEvent("rxwMenuAdmin:Soleil", "Les prévision annonce un temp ~y~Ensoleillé")
+                        ExecuteCommand('setTime 10 00')
+                        ExecuteCommand('setWeather extrasunny')
+                        TriggerServerEvent("rxwMenuAdmin:Soleil", "Les prévision annonce un temps ~y~Ensoleillé")
                         cooldown = true
                         Citizen.SetTimeout(10000, function()
                             cooldown = false
@@ -608,10 +608,10 @@ function menuAdmin()
                     end
                 end)
 
-                RageUI.ButtonWithStyle("Nuageux", "Vous permets des nuage", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
+                RageUI.ButtonWithStyle("Nuageux", "Rend le ciel nuageux", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
                     if Selected then
-                        ExecuteCommand('weather overcast')
-                        TriggerServerEvent("rxwMenuAdmin:Soleil", "Les prévision annonce un temp ~c~Nuageux")
+                        ExecuteCommand('setWeather overcast')
+                        TriggerServerEvent("rxwMenuAdmin:Soleil", "Les prévision annonce un temps ~c~Nuageux")
                         cooldown = true
                         Citizen.SetTimeout(10000, function()
                             cooldown = false
@@ -619,9 +619,9 @@ function menuAdmin()
                     end
                 end)
 
-                RageUI.ButtonWithStyle("Pluie", "Vous permets de la pluis", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
+                RageUI.ButtonWithStyle("Pluie", "Rend le ciel pluvieux", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
                     if Selected then
-                        ExecuteCommand('weather rain')
+                        ExecuteCommand('setWeather rain')
                         TriggerServerEvent("rxwMenuAdmin:Soleil", "Les prévision annonce de la ~b~Pluie")
                         cooldown = true
                         Citizen.SetTimeout(10000, function()
@@ -630,12 +630,9 @@ function menuAdmin()
                     end
                 end)
 
-                RageUI.Separator("↓ ~r~Tempête ~s~↓")
-                
-                
-                RageUI.ButtonWithStyle("Orage", "Vous permets de faire une tempête d'orage", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
+                RageUI.ButtonWithStyle("Orage", "Rend le ciel orageux", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
                     if Selected then
-                        ExecuteCommand('weather thunder')
+                        ExecuteCommand('setWeather thunder')
                         TriggerServerEvent("orage", "Les prévision annonce une tempête ~r~d'orage")
                         cooldown = true
                         Citizen.SetTimeout(10000, function()
@@ -643,10 +640,76 @@ function menuAdmin()
                         end)
                     end
                 end)
-                RageUI.ButtonWithStyle("Neige", "Vous permets de faire une tempête de neige", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
+                
+                RageUI.ButtonWithStyle("Neige", "Rend le ciel en tempête de neige", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
                     if Selected then
-                        ExecuteCommand('weather blizzard')
+                        ExecuteCommand('setWeather blizzard')
                         TriggerServerEvent("orage", "Les prévision annonce une tempête de ~r~ Neige")
+                        cooldown = true
+                        Citizen.SetTimeout(10000, function()
+                            cooldown = false
+                        end)
+                    end
+                end)
+				RageUI.ButtonWithStyle("Stopper", "Stopper le changement du ciel", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
+                    if Selected then
+                        ExecuteCommand('freezeWeather true')
+                        TriggerServerEvent("rxwMenuAdmin:Soleil", "Met en arrêt ~r~le temps")
+                        cooldown = true
+                        Citizen.SetTimeout(10000, function()
+                            cooldown = false
+                        end)
+                    end
+                end)
+                
+                RageUI.ButtonWithStyle("Remettre", "Remettre changement du ciel", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
+                    if Selected then
+                        ExecuteCommand('freezeWeather false')
+                        TriggerServerEvent("rxwMenuAdmin:Soleil", "Met en fonction ~r~le temps")
+                        cooldown = true
+                        Citizen.SetTimeout(10000, function()
+                            cooldown = false
+                        end)
+                    end
+                end)
+
+                RageUI.Separator("~o~Gestion de l'Horloge")
+                
+                
+                RageUI.ButtonWithStyle("Midi", "Avancer l'heure à 12h00", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
+                    if Selected then
+                        ExecuteCommand('setTime 12 00')
+                        TriggerServerEvent("rxwMenuAdmin:Soleil", "L'horloge est avancé à ~c~midi")
+                        cooldown = true
+                        Citizen.SetTimeout(10000, function()
+                            cooldown = false
+                        end)
+                    end
+                end)
+                RageUI.ButtonWithStyle("Minuit", "Avancer l'heure à 00h00", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
+                    if Selected then
+                        ExecuteCommand('setTime 00 00')
+                        TriggerServerEvent("rxwMenuAdmin:Soleil", "L'horloge est avancé à ~r~minuit")
+                        cooldown = true
+                        Citizen.SetTimeout(10000, function()
+                            cooldown = false
+                        end)
+                    end
+                end)
+                RageUI.ButtonWithStyle("Stopper", "Stopper l'horloge", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
+                    if Selected then
+                        ExecuteCommand('freezeTime true')
+                        TriggerServerEvent("rxwMenuAdmin:Soleil", "Met en arrêt ~r~l'horloge")
+                        cooldown = true
+                        Citizen.SetTimeout(10000, function()
+                            cooldown = false
+                        end)
+                    end
+                end)
+                RageUI.ButtonWithStyle("Remettre", "Remettre l'horloge", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
+                    if Selected then
+                        ExecuteCommand('freezeTime false')
+                        TriggerServerEvent("rxwMenuAdmin:Soleil", "Met en fonction ~r~l'horloge")
                         cooldown = true
                         Citizen.SetTimeout(10000, function()
                             cooldown = false

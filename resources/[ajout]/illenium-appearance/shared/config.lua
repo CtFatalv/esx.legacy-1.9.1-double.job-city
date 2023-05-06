@@ -76,12 +76,12 @@ Config.DisableComponents = {
     Masks = false,
     UpperBody = false,
     LowerBody = false,
-    Bags = false,
+    Bags = true,
     Shoes = false,
     ScarfAndChains = false,
-    BodyArmor = false,
+    BodyArmor = true,
     Shirts = false,
-    Decals = false,
+    Decals = true,
     Jackets = false
 }
 
@@ -114,14 +114,14 @@ Config.Blips = {
         Color = 4,
         Scale = 0.7,
         Name = "Tattoo Shop",
-    },
-    ["surgeon"] = {
+    }
+--[[    ["surgeon"] = {
         Show = true,
         Sprite = 102,
         Color = 4,
         Scale = 0.7,
         Name = "Plastic Surgeon",
-    }
+    }]]
 }
 
 Config.TargetConfig = {
@@ -146,13 +146,13 @@ Config.TargetConfig = {
         label = "Open Tattoo Shop",
         distance = 3
     },
-    ["surgeon"] = {
+--[[    ["surgeon"] = {
         model = "s_m_m_doctor_01",
         scenario = "WORLD_HUMAN_STAND_MOBILE",
         icon = "fas fa-scalpel",
         label = "Open Surgeon",
         distance = 3
-    },
+    },]]
     ["clothingroom"] = {
         model = "mp_g_m_pros_01",
         scenario = "WORLD_HUMAN_STAND_MOBILE",
@@ -536,8 +536,8 @@ Config.Stores = {
             vector3(-298.23013305664, 6199.2451171875, 31.49),
             vector3(-294.1501159668, 6203.2700195312, 31.49)
         }
-    },
-    {
+    }
+--[[    {
         type = "surgeon",
         coords = vector4(298.78, -572.81, 43.26, 114.27),
         size = vector3(4, 4, 4),
@@ -549,7 +549,7 @@ Config.Stores = {
             vector3(293.56317138672, -572.60675048828, 43.26),
             vector3(296.28656005859, -570.330078125, 43.26)
         }
-    }
+    }]]
 }
 
 

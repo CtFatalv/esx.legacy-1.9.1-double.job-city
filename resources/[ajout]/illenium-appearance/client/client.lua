@@ -606,13 +606,6 @@ function OpenMenu(isPedMenu, menuType, menuData)
         end
     elseif menuType == "job-outfit" then
         mainMenu.title = _L("clothing.outfits.title")
-        menuItems[#menuItems + 1] = {
-            title = _L("clothing.outfits.civilian.title"),
-            description = _L("clothing.outfits.civilian.description"),
-            event = "illenium-appearance:client:reloadSkin",
-            args = true
-        }
-
         local workOutfitsMenuID = "illenium_appearance_work_outfits_menu"
         RegisterWorkOutfitsListMenu(workOutfitsMenuID, mainMenuID, menuData)
 
@@ -648,7 +641,7 @@ RegisterNetEvent("illenium-appearance:client:OpenBarberShop", OpenBarberShop)
 
 RegisterNetEvent("illenium-appearance:client:OpenTattooShop", OpenTattooShop)
 
-RegisterNetEvent("illenium-appearance:client:OpenSurgeonShop", OpenSurgeonShop)
+--RegisterNetEvent("illenium-appearance:client:OpenSurgeonShop", OpenSurgeonShop)
 
 RegisterNetEvent("illenium-appearance:client:changeOutfit", function(data)
     local pedModel = client.getPedModel(cache.ped)
