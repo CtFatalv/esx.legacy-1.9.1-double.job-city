@@ -23,192 +23,6 @@ function cleanPlayer(playerPed)
 	ResetPedMovementClipset(playerPed, 0)
 end
 
-function setUniform(uniform, playerPed)
-	TriggerEvent('skinchanger:getSkin', function(skin)
-		local uniformObject
-
-		if skin.sex == 0 then
-			uniformObject = Config.Uniforms[uniform].male
-		else
-			uniformObject = Config.Uniforms[uniform].female
-		end
-
-		if uniformObject then
-			TriggerEvent('skinchanger:loadClothes', skin, uniformObject)
-
-			if uniform == 'bullet_wear' then
-				SetPedArmour(playerPed, 100)
-			end
-		else
-			ESX.ShowNotification(TranslateCap('no_outfit'))
-		end
-	end)
-end
-
-function OpenCloakroomMenu()
-	local playerPed = PlayerPedId()
-	local grade = ESX.PlayerData.job.grade_name
-
-	local elements = {
-		{unselectable = true, icon = "fas fa-shirt", title = TranslateCap("cloakroom")},
-		{icon = "fas fa-shirt", title = TranslateCap('citizen_wear'), value = 'citizen_wear'},
-		{icon = "fas fa-shirt", title = TranslateCap('bullet_wear'), uniform = 'bullet_wear'},
-		{icon = "fas fa-shirt", title = TranslateCap('gilet_wear'), uniform = 'gilet_wear'},
-		{icon = "fas fa-shirt", title = TranslateCap('police_wear'), uniform = grade}
-	}
-
-	if Config.EnableCustomPeds then
-		for k,v in ipairs(Config.CustomPeds.shared) do
-			elements[#elements+1] = {
-				icon = "fas fa-shirt",
-				title = v.label, 
-				value = 'freemode_ped', 
-				maleModel = v.maleModel, 
-				femaleModel = v.femaleModel
-			}
-		end
-
-		for k,v in ipairs(Config.CustomPeds[grade]) do
-			elements[#elements+1] = {
-				icon = "fas fa-shirt",
-				title = v.label, 
-				value = 'freemode_ped', 
-				maleModel = v.maleModel, 
-				femaleModel = v.femaleModel
-			}
-		end
-	end
-
-	ESX.OpenContext("right", elements, function(menu,element)
-		cleanPlayer(playerPed)
-		local data = {current = element}
-
-		if data.current.value == 'citizen_wear' then
-			if Config.EnableCustomPeds then
-				ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin, jobSkin)
-					local isMale = skin.sex == 0
-
-					TriggerEvent('skinchanger:loadDefaultModel', isMale, function()
-						ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
-							TriggerEvent('skinchanger:loadSkin', skin)
-							TriggerEvent('esx:restoreLoadout')
-						end)
-					end)
-
-				end)
-			else
-				ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
-					TriggerEvent('skinchanger:loadSkin', skin)
-				end)
-			end
-
-			if Config.EnableESXService then
-				ESX.TriggerServerCallback('esx_service:isInService', function(isInService)
-					if isInService then
-						playerInService = false
-
-						local notification = {
-							title    = TranslateCap('service_anonunce'),
-							subject  = '',
-							msg      = TranslateCap('service_out_announce', GetPlayerName(PlayerId())),
-							iconType = 1
-						}
-
-						TriggerServerEvent('esx_service:notifyAllInService', notification, 'police')
-
-						TriggerServerEvent('esx_service:disableService', 'police')
-						TriggerEvent('esx_policejob:updateBlip')
-						ESX.ShowNotification(TranslateCap('service_out'))
-					end
-				end, 'police')
-			end
-		end
-
-		if Config.EnableESXService and data.current.value ~= 'citizen_wear' then
-			local awaitService
-
-			ESX.TriggerServerCallback('esx_service:isInService', function(isInService)
-				if not isInService then
-
-					if Config.MaxInService ~= -1 then
-						ESX.TriggerServerCallback('esx_service:enableService', function(canTakeService, maxInService, inServiceCount)
-							if not canTakeService then
-								ESX.ShowNotification(TranslateCap('service_max', inServiceCount, maxInService))
-							else
-								awaitService = true
-								playerInService = true
-
-								local notification = {
-									title    = TranslateCap('service_anonunce'),
-									subject  = '',
-									msg      = TranslateCap('service_in_announce', GetPlayerName(PlayerId())),
-									iconType = 1
-								}
-
-								TriggerServerEvent('esx_service:notifyAllInService', notification, 'police')
-								TriggerEvent('esx_policejob:updateBlip')
-								ESX.ShowNotification(TranslateCap('service_in'))
-							end
-						end, 'police')
-					else
-						awaitService = true
-						playerInService = true
-
-						local notification = {
-							title    = TranslateCap('service_anonunce'),
-							subject  = '',
-							msg      = TranslateCap('service_in_announce', GetPlayerName(PlayerId())),
-							iconType = 1
-						}
-
-						TriggerServerEvent('esx_service:notifyAllInService', notification, 'police')
-						TriggerEvent('esx_policejob:updateBlip')
-						ESX.ShowNotification(TranslateCap('service_in'))
-					end
-
-				else
-					awaitService = true
-				end
-			end, 'police')
-
-			while awaitService == nil do
-				Wait(0)
-			end
-
-			-- if we couldn't enter service don't let the player get changed
-			if not awaitService then
-				return
-			end
-		end
-
-		if data.current.uniform then
-			setUniform(data.current.uniform, playerPed)
-		elseif data.current.value == 'freemode_ped' then
-			local modelHash
-
-			ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin, jobSkin)
-				if skin.sex == 0 then
-					modelHash = joaat(data.current.maleModel)
-				else
-					modelHash = joaat(data.current.femaleModel)
-				end
-
-				ESX.Streaming.RequestModel(modelHash, function()
-					SetPlayerModel(PlayerId(), modelHash)
-					SetModelAsNoLongerNeeded(modelHash)
-					SetPedDefaultComponentVariation(PlayerPedId())
-
-					TriggerEvent('esx:restoreLoadout')
-				end)
-			end)
-		end
-	end, function(menu)
-		CurrentAction     = 'menu_cloakroom'
-		CurrentActionMsg  = TranslateCap('open_cloackroom')
-		CurrentActionData = {}
-	end)
-end
-
 function OpenArmoryMenu(station)
 	local elements
 	if Config.OxInventory then
@@ -709,93 +523,6 @@ function OpenPutWeaponMenu()
 	end)
 end
 
-function OpenBuyWeaponsMenu()
-	local elements = {
-		{unselectable = true, icon = "fas fa-gun", title = TranslateCap('armory_weapontitle')}
-	}
-	local playerPed = PlayerPedId()
-
-	for k,v in ipairs(Config.AuthorizedWeapons[ESX.PlayerData.job.grade_name]) do
-		local weaponNum, weapon = ESX.GetWeapon(v.weapon)
-		local components, label = {}
-		local hasWeapon = HasPedGotWeapon(playerPed, joaat(v.weapon), false)
-
-		if v.components then
-			for i=1, #v.components do
-				if v.components[i] then
-					local component = weapon.components[i]
-					local hasComponent = HasPedGotWeaponComponent(playerPed, joaat(v.weapon), component.hash)
-
-					if hasComponent then
-						label = ('%s: <span style="color:green;">%s</span>'):format(component.label, TranslateCap('armory_owned'))
-					else
-						if v.components[i] > 0 then
-							label = ('%s: <span style="color:green;">%s</span>'):format(component.label, TranslateCap('armory_item', ESX.Math.GroupDigits(v.components[i])))
-						else
-							label = ('%s: <span style="color:green;">%s</span>'):format(component.label, TranslateCap('armory_free'))
-						end
-					end
-
-					components[#components+1] = {
-						icon = "fas fa-gun",
-						title = label,
-						componentLabel = component.label,
-						hash = component.hash,
-						name = component.name,
-						price = v.components[i],
-						hasComponent = hasComponent,
-						componentNum = i
-					}
-				end
-			end
-		end
-
-		if hasWeapon and v.components then
-			label = ('%s: <span style="color:green;">></span>'):format(weapon.label)
-		elseif hasWeapon and not v.components then
-			label = ('%s: <span style="color:green;">%s</span>'):format(weapon.label, TranslateCap('armory_owned'))
-		else
-			if v.price > 0 then
-				label = ('%s: <span style="color:green;">%s</span>'):format(weapon.label, TranslateCap('armory_item', ESX.Math.GroupDigits(v.price)))
-			else
-				label = ('%s: <span style="color:green;">%s</span>'):format(weapon.label, TranslateCap('armory_free'))
-			end
-		end
-
-		elements[#elements+1] = {
-			icon = "fas fa-gun",
-			title = label,
-			weaponLabel = weapon.label,
-			name = weapon.name,
-			components = components,
-			price = v.price,
-			hasWeapon = hasWeapon
-		}
-	end
-
-	ESX.OpenContext("right", elements, function(menu,element)
-		local data = {current = element}
-		if data.current.hasWeapon then
-			if #data.current.components > 0 then
-				OpenWeaponComponentShop(data.current.components, data.current.name, menu)
-			end
-		else
-			ESX.TriggerServerCallback('esx_policejob:buyWeapon', function(bought)
-				if bought then
-					if data.current.price > 0 then
-						ESX.ShowNotification(TranslateCap('armory_bought', data.current.weaponLabel, ESX.Math.GroupDigits(data.current.price)))
-					end
-
-					menu.close()
-					OpenBuyWeaponsMenu()
-				else
-					ESX.ShowNotification(TranslateCap('armory_money'))
-				end
-			end, data.current.name, 1)
-		end
-	end)
-end
-
 function OpenWeaponComponentShop(components, weaponName, parentShop)
 
 	ESX.OpenContext("right", components, function(menu,element)
@@ -1227,31 +954,6 @@ CreateThread(function()
 			local currentStation, currentPart, currentPartNum
 
 			for k,v in pairs(Config.PoliceStations) do
-				for i=1, #v.Cloakrooms, 1 do
-					local distance = #(playerCoords - v.Cloakrooms[i])
-
-					if distance < Config.DrawDistance then
-						DrawMarker(Config.MarkerType.Cloakrooms, v.Cloakrooms[i], 0.0, 0.0, 0.0, 0, 0.0, 0.0, 1.0, 1.0, 1.0, Config.MarkerColor.r, Config.MarkerColor.g, Config.MarkerColor.b, 100, false, true, 2, true, false, false, false)
-						Sleep = 0
-
-						if distance < Config.MarkerSize.x then
-							isInMarker, currentStation, currentPart, currentPartNum = true, k, 'Cloakroom', i
-						end
-					end
-				end
-
-				for i=1, #v.Armories, 1 do
-					local distance = #(playerCoords - v.Armories[i])
-
-					if distance < Config.DrawDistance then
-						DrawMarker(Config.MarkerType.Armories, v.Armories[i], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.5, 0.5, Config.MarkerColor.r, Config.MarkerColor.g, Config.MarkerColor.b, 100, false, true, 2, true, false, false, false)
-						Sleep = 0
-
-						if distance < Config.MarkerSize.x then
-							isInMarker, currentStation, currentPart, currentPartNum = true, k, 'Armory', i
-						end
-					end
-				end
 
 				for i=1, #v.Vehicles, 1 do
 					local distance = #(playerCoords - v.Vehicles[i].Spawner)
@@ -1275,21 +977,6 @@ CreateThread(function()
 
 						if distance < Config.MarkerSize.x then
 							isInMarker, currentStation, currentPart, currentPartNum = true, k, 'Helicopters', i
-						end
-					end
-				end
-
-				if Config.EnablePlayerManagement and ESX.PlayerData.job.grade_name == 'boss' then
-					for i=1, #v.BossActions, 1 do
-						local distance = #(playerCoords - v.BossActions[i])
-
-						if distance < Config.DrawDistance then
-							DrawMarker(Config.MarkerType.BossActions, v.BossActions[i], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, Config.MarkerColor.r, Config.MarkerColor.g, Config.MarkerColor.b, 100, false, true, 2, true, false, false, false)
-							Sleep = 0
-
-							if distance < Config.MarkerSize.x then
-								isInMarker, currentStation, currentPart, currentPartNum = true, k, 'BossActions', i
-							end
 						end
 					end
 				end
@@ -1563,3 +1250,24 @@ if ESX.PlayerLoaded and ESX.PlayerData.job == 'police' then
 		TriggerServerEvent('esx_policejob:forceBlip')
 	end)
 end
+
+exports.ox_target:addBoxZone({
+    coords =  vector3(446.97, -974.11, 30.44),
+    size = vec3(0.2, 0.5, 0.1),
+    rotation = 102,
+    debug = false,
+    options = {
+        {
+            name = 'Gestion',
+            event = 'bossMenu',
+            event = 'esx_policejob:bossMenu',
+            icon = 'fa-solid fa-computer',
+            label = 'Gestion',
+        }
+    }
+})
+
+AddEventHandler('esx_policejob:bossMenu', function()
+    TriggerEvent('esx_society:openBossMenu', 'police', function(data, menu)
+    end, {wash = false})
+end)

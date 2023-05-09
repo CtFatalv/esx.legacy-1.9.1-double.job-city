@@ -19,15 +19,15 @@ Config.notWinterBlacklist = {
     ["XMAS"] = true
 }
 
-Config.maxRandom = 4
+Config.maxRandom = 9
 
 
 Config.default = {
     ["weather"] = "EXTRASUNNY",
     ["nextWeather"] = {
-        [1] = "CLEARING",
-        [2] = "RAIN",
-        [3] = "CLEAR"
+        [1] = "EXTRASUNNY",
+        [2] = "EXTRASUNNY",
+        [3] = "EXTRASUNNY"
     }
 }
 
