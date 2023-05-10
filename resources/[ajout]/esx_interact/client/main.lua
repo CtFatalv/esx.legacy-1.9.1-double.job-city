@@ -343,68 +343,10 @@ exports.ox_target:addGlobalPlayer({
 })
 
 exports.ox_target:addGlobalVehicle({
-            {
-                type = "client",
-                event = "request:CuffPed",
-                icon = "fas fa-hands",
-                label = "Cuff / Uncuff",
-                item = 'handcuffs',
-                job = "police",
-            },
-            {
-                type = "client",
-                event = "request:CuffPed",
-                icon = "fas fa-hands",
-                label = "Cuff / Uncuff",
-                item = 'handcuffs',
-                job = "police",
-            },
-})
-
---[[
-Citizen.CreateThread(function()
-	while true do
-	Citizen.Wait(0)
-	if ESX.PlayerData.job and ESX.PlayerData.job.name == 'police' then
-        exports.ox_target:addGlobalVehicle({
-            {
-                event = "outveh",
-                icon = Config.outveh_img,
-                label = Config.outveh,
-                num = 1
-            },
-        })
-			print(123)
-                
-		else
-			print(1234)
-		end
-	end
-	Citizen.Wait(10000)
-end)
-]]
---[[
-exports.ox_target:addGlobalVehicle(
-	{
-
-	if ESX.PlayerData.job and ESX.PlayerData.job.name == 'police' then
 	{
 		event = "outveh",
 		icon = Config.outveh_img,
 		label = Config.outveh,
 		num = 1
-	},	
-
-	else
-	lib.notify({
-		description = Config.RequiredItem,
-		style = {
-			backgroundColor = '#000000',
-			color = '#ffffff'
-		},
-		icon = 'people-robbery',
-		type = 'error'
-	})
-	end
+	},
 })
-]]
