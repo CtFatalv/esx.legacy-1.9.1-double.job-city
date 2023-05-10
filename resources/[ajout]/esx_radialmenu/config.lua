@@ -3,7 +3,8 @@ Config = {}
 Config.MenuItems = {
     [1] = {
         id = 'citizen',
-        title = 'Citizen',
+        --title = 'Citizen',
+		title = 'A venir',
         icon = 'user',
         items = {
             -- {
@@ -16,7 +17,8 @@ Config.MenuItems = {
             -- },
             {
                 id = 'handsup',
-                title = 'Hands Up',
+          --      title = 'Hands Up',
+		title = 'A venir',
                 icon = 'hand',
                 type = 'cmd',
                 event = 'hu',
@@ -24,7 +26,8 @@ Config.MenuItems = {
             },
             {
                 id = 'getintrunk',
-                title = 'Get In Trunk',
+                --title = 'Get In Trunk',
+		title = 'A venir',
                 icon = 'car',
                 type = 'client',
                 event = 'cmds:getInTrunk',
@@ -48,7 +51,8 @@ Config.MenuItems = {
             -- },
             {
                 id = 'interactions',
-                title = 'Interaction',
+               -- title = 'Interaction',
+		title = 'A venir',
                 icon = 'exclamation-triangle',
                 items = {
                     {
@@ -284,47 +288,47 @@ Config.MenuItems = {
         items = {
             {
                 id = 'vehicledoors',
-                title = 'Vehicle Doors',
+                title = 'Porte véhicule',
                 icon = 'car-side',
                 items = {
                     {
                         id = 'door0',
-                        title = 'Drivers door',
+                        title = 'Porte Chauffeur',
                         icon = 'car-side',
                         type = 'client',
                         event = 'qb-radialmenu:client:openDoor',
                         shouldClose = false
                     }, {
                         id = 'door4',
-                        title = 'Hood',
+                        title = 'Capot',
                         icon = 'car',
                         type = 'client',
                         event = 'qb-radialmenu:client:openDoor',
                         shouldClose = false
                     }, {
                         id = 'door1',
-                        title = 'Passengers door',
+                        title = 'Porte Passager',
                         icon = 'car-side',
                         type = 'client',
                         event = 'qb-radialmenu:client:openDoor',
                         shouldClose = false
                     }, {
                         id = 'door3',
-                        title = 'Right rear',
+                        title = 'Porte arrière droite',
                         icon = 'car-side',
                         type = 'client',
                         event = 'qb-radialmenu:client:openDoor',
                         shouldClose = false
                     }, {
                         id = 'door5',
-                        title = 'Trunk',
+                        title = 'Coffre',
                         icon = 'car',
                         type = 'client',
                         event = 'qb-radialmenu:client:openDoor',
                         shouldClose = false
                     }, {
                         id = 'door2',
-                        title = 'Left rear',
+                        title = 'Porte arrière gauche',
                         icon = 'car-side',
                         type = 'client',
                         event = 'qb-radialmenu:client:openDoor',
@@ -445,6 +449,14 @@ Config.MenuItems = {
                         shouldClose = false
                     }
                 }
+            },
+            {
+                id = 'vehicle',
+                title = 'Gestion des clés',
+                icon = 'car',
+                type = 'client',
+                event = 'Alf-Carkeys:OpenKeysMenu',
+                shouldClose = true
             }
         }
     },
@@ -457,421 +469,16 @@ Config.MenuItems = {
 }
 
 Config.JobInteractions = {
-    ["ambulance"] = { -- pb-ambulancejob:EMSbed pb-ambulancejob:EMSrevive
-        {
-            id = 'statuscheck',
-            title = 'Examine Person',
-            icon = 'stethoscope',
-            type = 'client',
-            event = 'pb-ambulancejob:examine',
-            shouldClose = true
-        },
-        {
-            id = 'reviveplayer',
-            title = 'Revive',
-            icon = 'heartbeat',
-            type = 'client',
-            event = 'pb-ambulancejob:EMSrevive',
-            shouldClose = true
-        },
-        {
-            id = 'healwounds',
-            title = 'Heal wounds',
-            icon = 'band-aid',
-            type = 'client',
-            event = 'pb-ambulancejob:HealWounds',
-            shouldClose = true
-        },
-        {
-            id = 'treatinjuries',
-            title = 'Treat Injuries',
-            icon = 'suitcase-medical',
-            type = 'client',
-            event = 'pb-ambulancejob:TreatInjuries',
-            shouldClose = true
-        },
-        {
-            id = 'emergencybutton2',
-            title = 'Panic Button',
-            icon = 'bell',
-            type = 'client',
-            event = 'pb-police:omgad',
-            shouldClose = true
-        },
-        {
-            id = 'brancardoptions',
-            title = 'Stretcher',
-            icon = 'procedures',
-            items = {
-                {
-                    id = 'spawnbrancard',
-                    title = 'Spawn Stretcher',
-                    icon = 'plus',
-                    type = 'client',
-                    event = 'hospital:client:TakeBrancard',
-                    shouldClose = false
-                }, {
-                    id = 'despawnbrancard',
-                    title = 'Remove Stretcher',
-                    icon = 'minus',
-                    type = 'client',
-                    event = 'hospital:client:RemoveBrancard',
-                    shouldClose = false
-                }
-            }
-        },
-        {
-            id = 'ambulanceactions',
-            title = 'EMS Actions',
-            icon = 'tasks',
-            items = {
-                {
-                    id = 'escort',
-                    title = 'Escort',
-                    icon = 'user-friends',
-                    type = 'client',
-                    event = 'pb-police:escort',
-                    shouldClose = true
-                },
-                {
-                    id = 'putpersoninsidecar',
-                    title = 'Put in vehicle',
-                    icon = 'door-open',
-                    type = 'client',
-                    event = 'pb-ambulancejob:CLputInVehicle',
-                    shouldClose = true
-                },
-                {
-                    id = 'putpersonoutofcar',
-                    title = 'Take out vehicle',
-                    icon = 'door-closed',
-                    type = 'client',
-                    event = 'EMS:takeOutVehicle',
-                    shouldClose = true
-                },
-                {
-                    id = 'putpersoninbed',
-                    title = 'Put in bed',
-                    icon = 'bed',
-                    type = 'client',
-                    event = 'pb-ambulancejob:EMSbed',
-                    shouldClose = true
-                },
-            }
-        }
-    },
-    ["taxi"] = {
-        -- {
-        --     id = 'togglemeter',
-        --     title = 'Show/Hide Meter',
-        --     icon = 'eye-slash',
-        --     type = 'client',
-        --     event = 'qb-taxi:client:toggleMeter',
-        --     shouldClose = false
-        -- }, {
-        --     id = 'togglemouse',
-        --     title = 'Start/Stop Meter',
-        --     icon = 'hourglass-start',
-        --     type = 'client',
-        --     event = 'qb-taxi:client:enableMeter',
-        --     shouldClose = true
-        -- }, {
-        --     id = 'npc_mission',
-        --     title = 'NPC Mission',
-        --     icon = 'taxi',
-        --     type = 'client',
-        --     event = 'qb-taxi:client:DoTaxiNpc',
-        --     shouldClose = true
-        -- }
-    },
-    ["mechanic"] = {
-        -- {
-        --     id = 'togglenpc',
-        --     title = 'Toggle NPC',
-        --     icon = 'toggle-on',
-        --     type = 'client',
-        --     event = 'jobs:client:ToggleNpc',
-        --     shouldClose = true
-        -- }, {
-        --     id = 'towvehicle',
-        --     title = 'Tow vehicle',
-        --     icon = 'truck-pickup',
-        --     type = 'client',
-        --     event = 'qb-tow:client:TowVehicle',
-        --     shouldClose = true
-        -- }
-    },
     ["police"] = {
-        {
-            id = 'mdt',
-            title = 'MDT',
-            icon = 'tablet',
-            type = 'cmd',
-            event = 'mdt',
-            shouldClose = true
-        },
-        {
-            id = 'gsrtest',
-            title = 'GSR Test',
-            icon = 'person-rifle',
-            type = 'cmd',
-            event = 'gsrtest',
-            shouldClose = true
-        },
-        {
-            id = 'emergencybutton',
-            title = 'Panic Button',
-            icon = 'bell',
-            type = 'client',
-            event = 'pb-police:omgad',
-            shouldClose = true
-        },
-        {
-            id = 'k9menu',
-            title = 'K9',
-            icon = 'dog',
-            items = {
-                {
-                    id = 'K9spawn',
-                    title = 'Take Out',
-                    icon = 'house-damage',
-                    type = 'client',
-                    event = 'pb-k9:k9spawn',
-                    shouldClose = true
-                },
-                -- {
-                --     id = 'K9attack',
-                --     title = 'Attack',
-                --     icon = 'burst',
-                --     type = 'client',
-                --     event = 'pb-k9:k9attack',
-                --     shouldClose = true
-                -- },
-                {
-                    id = 'K9attack',
-                    title = 'Stop Attacking',
-                    icon = 'shield-alt',
-                    type = 'client',
-                    event = 'pb-k9:k9stopattack',
-                    shouldClose = true
-                },
-                {
-                    id = 'K9drug',
-                    title = 'Sniff Person',
-                    icon = 'cannabis',
-                    type = 'client',
-                    event = 'pb-k9:k9searchdrugs',
-                    shouldClose = true
-                },
-                {
-                    id = 'K9car',
-                    title = 'Get In/Out Car',
-                    icon = 'door-open',
-                    type = 'client',
-                    event = 'pb-k9:getincar',
-                    shouldClose = true
-                },
-                {
-                    id = 'K9attack',
-                    title = 'Give Orders',
-                    icon = 'hand-point-left',
-                    items = {
-                        {
-                            id = 'K9come',
-                            title = 'Come here',
-                            icon = 'paw',
-                            type = 'client',
-                            event = 'pb-k9:come',
-                            shouldClose = false
-                        },
-                        {
-                            id = 'K9stay',
-                            title = 'Stay',
-                            icon = 'paw',
-                            type = 'client',
-                            event = 'pb-k9:k9idle',
-                            shouldClose = false
-                        },
-                        {
-                            id = 'K9stay2',
-                            title = 'Stay 2',
-                            icon = 'paw',
-                            type = 'client',
-                            event = 'pb-k9:k9idle2',
-                            shouldClose = false
-                        },
-                        {
-                            id = 'K9sit',
-                            title = 'Sit',
-                            icon = 'paw',
-                            type = 'client',
-                            event = 'pb-k9:k9sit',
-                            shouldClose = false
-                        },
-                        {
-                            id = 'K9lie',
-                            title = 'Lie Down',
-                            icon = 'paw',
-                            type = 'client',
-                            event = 'pb-k9:k9liedown',
-                            shouldClose = false
-                        },
-                        {
-                            id = 'K9Stand',
-                            title = 'Stand',
-                            icon = 'paw',
-                            type = 'client',
-                            event = 'pb-k9:k9stand',
-                            shouldClose = false
-                        },
-                    }
-                },
-            }
-        },
-        -- {
-        --     id = 'checkvehstatus',
-        --     title = 'Check Tune Status',
-        --     icon = 'info-circle',
-        --     type = 'car',
-        --     event = 'qb-tunerchip:server:TuneStatus',
-        --     shouldClose = true
-        -- }, {
-        --     id = 'resethouse',
-        --     title = 'Reset house lock',
-        --     icon = 'key',
-        --     type = 'client',
-        --     event = 'qb-houses:client:ResetHouse',
-        --     shouldClose = true
-        -- }, {
-        --     id = 'takedriverlicense',
-        --     title = 'Revoke Drivers License',
-        --     icon = 'id-card',
-        --     type = 'client',
-        --     event = 'police:client:SeizeDriverLicense',
-        --     shouldClose = true
-        -- },
         {
             id = 'policeinteraction',
             title = 'Police Actions',
             icon = 'tasks',
-            items = {
-                -- {
-                --     id = 'statuscheck',
-                --     title = 'Check Health Status',
-                --     icon = 'heartbeat',
-                --     type = 'client',
-                --     event = 'hospital:client:CheckStatus',
-                --     shouldClose = true
-                -- },
-                -- {
-                --     id = 'checkstatus',
-                --     title = 'Check status',
-                --     icon = 'question',
-                --     type = 'client',
-                --     event = 'police:client:CheckStatus',
-                --     shouldClose = true
-                -- },
-                {
-                    id = 'LSPDputinvehicle',
-                    title = 'Put in/out vehicle',
-                    icon = 'door-open',
-                    type = 'client',
-                    event = 'LSPD:putinvehicle',
-                    shouldClose = true
-                },
-                {
-                    id = 'escort',
-                    title = 'Escort',
-                    icon = 'user-friends',
-                    type = 'client',
-                    event = 'pb-police:escort',
-                    shouldClose = true
-                },
-                {
-                    id = 'searchplayer',
-                    title = 'Search',
-                    icon = 'search',
-                    type = 'cmd',
-                    event = 'search',
-                    shouldClose = true
-                },
-                -- {
-                --     id = 'jailplayer',
-                --     title = 'Jail',
-                --     icon = 'user-lock',
-                --     type = 'client',
-                --     event = 'police:client:JailPlayer',
-                --     shouldClose = true
-                -- }
-            }
-        }, {
-            id = 'policeobjects',
-            title = 'Objects',
-            icon = 'road',
-            items = {
-                {
-                    id = 'spawnpion',
-                    title = 'Cone',
-                    icon = 'exclamation-triangle',
-                    type = 'client',
-                    event = 'police:client:spawnCone',
-                    shouldClose = false
-                }, {
-                    id = 'spawnhek',
-                    title = 'Gate',
-                    icon = 'torii-gate',
-                    type = 'client',
-                    event = 'police:client:spawnBarrier',
-                    shouldClose = false
-                }, {
-                    id = 'spawnschotten',
-                    title = 'Speed Limit Sign',
-                    icon = 'sign',
-                    type = 'client',
-                    event = 'police:client:spawnRoadSign',
-                    shouldClose = false
-                }, {
-                    id = 'spawntent',
-                    title = 'Tent',
-                    icon = 'campground',
-                    type = 'client',
-                    event = 'police:client:spawnTent',
-                    shouldClose = false
-                }, {
-                    id = 'spawnverlichting',
-                    title = 'Lighting',
-                    icon = 'lightbulb',
-                    type = 'client',
-                    event = 'police:client:spawnLight',
-                    shouldClose = false
-                },
-                -- {
-                --     id = 'spikestrip',
-                --     title = 'Spike Strips',
-                --     icon = 'caret-up',
-                --     type = 'client',
-                --     event = 'police:client:SpawnSpikeStrip',
-                --     shouldClose = false
-                -- },
-                {
-                    id = 'spikestrip',
-                    title = 'Spike Strips',
-                    icon = 'caret-up',
-                    type = 'cmd',
-                    event = 'spikes',
-                    shouldClose = false
-                },
-                {
-                    id = 'deleteobject',
-                    title = 'Remove object',
-                    icon = 'trash',
-                    type = 'client',
-                    event = 'police:client:deleteObject',
-                    shouldClose = false
-                }
-            }
+            type = 'client',
+            event = 'esx_policejob:policeaction',
+            shouldClose = true
         }
-    },
+        }
     -- ["hotdog"] = {
     --     {
     --         id = 'togglesell',

@@ -33,6 +33,23 @@ Config.Markers = {
 }
 
 Config.Garages = {
+	Police = {
+		EntryPoint = {
+			x = 451.60,
+			y = -1018.02,
+			z = 28.50,
+		},
+		SpawnPoint = {
+			x = 451.60,
+			y = -1018.02,
+			z = 28.50,
+			heading = 92.52,
+		},
+		Sprite = 357,
+		Scale = 0.8,
+		Colour = 3,
+		ImpoundedName = "LosSantos",
+	},
 	VespucciBoulevard = {
 		EntryPoint = {
 			x = -285.2,

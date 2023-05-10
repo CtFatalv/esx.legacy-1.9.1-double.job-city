@@ -9,7 +9,7 @@ Config.PlateSpace = true -- enable / disable plate spaces (compatibility with es
 Config.SaveJob = true -- this config is to save the value to owned_vehicles.job column
 Config.Licensed = false -- Enable Driver Licensed Checker
 Config.DisplayCars = true -- enable display of cars
-Config.Marker = true -- use draw marker and Iscontrollpress native , popui will not work if this is true
+Config.Marker = false -- use draw marker and Iscontrollpress native , popui will not work if this is true
 
 -- VEHICLE THUMBNAILS IMAGE
 -- this is standalone
@@ -28,7 +28,7 @@ Config.Carkeys = function(props)
 end
 -- CARKEYS --
 --EXTRA
-Config.UseArenaSpawn = true -- will use custom location for spawning vehicle in quickpick == false
+Config.UseArenaSpawn = false -- will use custom location for spawning vehicle in quickpick == false
 -- MAIN
 VehicleShop = {
     ['pdm'] = { -- same with name

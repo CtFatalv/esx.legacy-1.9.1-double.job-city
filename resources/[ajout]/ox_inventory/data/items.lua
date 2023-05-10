@@ -215,4 +215,18 @@ return {
 		label = 'Scrap Metal',
 		weight = 80,
 	},
+    
+    ['handcuffs'] = {
+      label = 'Handcuffs',
+      weight = 100,
+      stack = false,
+      allowArmed = true
+    },
+    
+    ['rope'] = {
+      label = 'Rope',
+      weight = 100,
+      stack = false,
+      allowArmed = true
+    },
 }

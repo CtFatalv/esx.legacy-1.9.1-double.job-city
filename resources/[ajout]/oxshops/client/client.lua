@@ -150,3 +150,38 @@ CreateThread(function()
         end
     end
 end)
+
+-- Skin create
+local hash = GetHashKey("a_m_m_ktown_01")
+RequestModel(hash)
+while not HasModelLoaded(hash) do
+    Wait(1)
+end
+
+local Mime = CreatePed(4, hash, -584.93, -1061.31, 21.34, 272.07, false, true)
+FreezeEntityPosition(Mime, true)
+SetEntityInvincible(Mime, true)
+SetBlockingOfNonTemporaryEvents(Mime, true)
+
+local options = {
+    {
+        name = 'Achat',
+        event = 'uwu:shop',
+        icon = 'fa-solid fa-road',
+        label = 'Achat',
+    },
+}
+exports.ox_target:addLocalEntity(Mime, options)
+
+AddEventHandler('uwu:shop', function()
+--exports.ox_inventory:openInventory('shop', {type = "police"})
+                                TriggerEvent('esx_society:openBossMenu', ESX.PlayerData.job.name, function(data, menu)
+                            menu.close()
+end)
+
+
+
+
+
+
+

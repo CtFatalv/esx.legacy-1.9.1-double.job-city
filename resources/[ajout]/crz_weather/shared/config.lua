@@ -25,9 +25,15 @@ Config.maxRandom = 9
 Config.default = {
     ["weather"] = "EXTRASUNNY",
     ["nextWeather"] = {
-        [1] = "EXTRASUNNY",
-        [2] = "EXTRASUNNY",
-        [3] = "EXTRASUNNY"
+        [1] = "CLEARING",
+        [2] = "CLEAR",
+        [3] = "EXTRASUNNY",
+        [4] = "CLOUDS",
+        [5] = "CLEARING",
+        [6] = "CLEAR",
+        [7] = "EXTRASUNNY",
+        [8] = "CLOUDS",
+        [9] = "RAIN"
     }
 }
 

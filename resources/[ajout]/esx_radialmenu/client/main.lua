@@ -94,7 +94,7 @@ function setupSubItems()
             Config.MenuItems[3].items[2].items = {
                 [1] = {
                     id    = -1,
-                    title = 'Driver',
+                    title = 'Conducteur',
                     icon = 'caret-up',
                     type = 'client',
                     event = 'qb-radialmenu:client:ChangeSeat',
@@ -102,7 +102,7 @@ function setupSubItems()
                 },
                 [2] = {
                     id    = 0,
-                    title = 'Passenger',
+                    title = 'Passager',
                     icon = 'caret-up',
                     type = 'client',
                     event = 'qb-radialmenu:client:ChangeSeat',
@@ -113,7 +113,7 @@ function setupSubItems()
             Config.MenuItems[3].items[2].items = {
                 [4] = {
                     id    = -1,
-                    title = 'Driver',
+                    title = 'Conducteur',
                     icon = 'caret-up',
                     type = 'client',
                     event = 'qb-radialmenu:client:ChangeSeat',
@@ -121,7 +121,7 @@ function setupSubItems()
                 },
                 [1] = {
                     id    = 0,
-                    title = 'Passenger',
+                    title = 'Passager',
                     icon = 'caret-up',
                     type = 'client',
                     event = 'qb-radialmenu:client:ChangeSeat',
@@ -129,7 +129,7 @@ function setupSubItems()
                 },
                 [3] = {
                     id    = 1,
-                    title = 'Other',
+                    title = 'Autre',
                     icon = 'caret-down',
                     type = 'client',
                     event = 'qb-radialmenu:client:ChangeSeat',
@@ -140,7 +140,7 @@ function setupSubItems()
             Config.MenuItems[3].items[2].items = {
                 [4] = {
                     id    = -1,
-                    title = 'Driver',
+                    title = 'Conducteur',
                     icon = 'caret-up',
                     type = 'client',
                     event = 'qb-radialmenu:client:ChangeSeat',
@@ -148,7 +148,7 @@ function setupSubItems()
                 },
                 [1] = {
                     id    = 0,
-                    title = 'Passenger',
+                    title = 'Passager',
                     icon = 'caret-up',
                     type = 'client',
                     event = 'qb-radialmenu:client:ChangeSeat',
@@ -156,7 +156,7 @@ function setupSubItems()
                 },
                 [3] = {
                     id    = 1,
-                    title = 'Rear Left',
+                    title = 'Arrière Gauche',
                     icon = 'caret-down',
                     type = 'client',
                     event = 'qb-radialmenu:client:ChangeSeat',
@@ -164,7 +164,7 @@ function setupSubItems()
                 },
                 [2] = {
                     id    = 2,
-                    title = 'Rear Right',
+                    title = 'Arrière Droit',
                     icon = 'caret-down',
                     type = 'client',
                     event = 'qb-radialmenu:client:ChangeSeat',
@@ -258,7 +258,8 @@ AddEventHandler('qb-radialmenu:client:openDoor', function(data)
         end
     else
         --QBCore.Functions.Notify('There is no vehicle in sight...', 'error', 2500)
-        exports['mythic_notify']:SendAlert('error', 'There is no vehicle in sight...')
+       -- exports['mythic_notify']:SendAlert('error', 'Aucun véhicule proche...')
+		 ESX.ShowNotification("Aucun véhicule proche...", "error", 3000)
     end
 end)
 
@@ -342,14 +343,17 @@ AddEventHandler('qb-radialmenu:client:ChangeSeat', function(data)
             if kmh <= 100.0 then
                 SetPedIntoVehicle(PlayerPedId(), Veh, data.id)
                 --QBCore.Functions.Notify('Your now on the  '..data.title..'!')
-                exports['mythic_notify']:SendAlert('inform', 'Your now on the  '..data.title..'!')
+               -- exports['mythic_notify']:SendAlert('inform', 'Your now on the  '..data.title..'!')
+				ESX.ShowNotification("Vous avez changé de siège", "info", 3000)
             else
                 --QBCore.Functions.Notify('The vehicle goes to fast..')
-                exports['mythic_notify']:SendAlert('inform', 'The vehicle goes too fast..')
+               -- exports['mythic_notify']:SendAlert('inform', 'The vehicle goes too fast..')
+				ESX.ShowNotification("Le véhicule va trop vite..", "info", 3000)
             end
         else
             --QBCore.Functions.Notify('This seat is occupied..')
-            exports['mythic_notify']:SendAlert('inform', 'This seat is occupied..')
+          --  exports['mythic_notify']:SendAlert('inform', 'This seat is occupied..')
+			ESX.ShowNotification("Ce siège est occupé..", "info", 3000)
         end
     -- else
         --QBCore.Functions.Notify('You have a race harnas on u cant switch..', 'error')

@@ -117,7 +117,7 @@ CreateThread(function()
 end)
 
 getNextWeather = function()
-    local text = "10m = "..nextWeather[1].."\n20m = "..nextWeather[2].."\n30m = "..nextWeather[3]
+    local text = "10m = "..nextWeather[1].."\n20m = "..nextWeather[2].."\n30m = "..nextWeather[3].."\n40m = "..nextWeather[4].."\n50m = "..nextWeather[5].."\n60m = "..nextWeather[6].."\n70m = "..nextWeather[7].."\n80m = "..nextWeather[8].."\n90m = "..nextWeather[9]
     Notify(text)
 end
 

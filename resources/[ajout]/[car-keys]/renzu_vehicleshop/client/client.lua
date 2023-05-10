@@ -116,7 +116,7 @@ local garageped = nil
 local targetid = nil
 AddTarget = function(data)
 	function onEnter(self)
-		local model = `cs_jimmydisanto`
+		local model = `ig_paper`
 		lib.requestModel(model)
 		garageped = CreatePed(4,model,self.coords.x,self.coords.y,self.coords.z,0.0,false,true)
 		while not DoesEntityExist(garageped) do Wait(0) end
@@ -144,7 +144,7 @@ AddTarget = function(data)
 	
 	function inside(self)
         local coord = GetEntityCoords(garageped)
-		DrawMarker(1, coord.x, coord.y, coord.z-0.4, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 1.0, 1.0, 1.0, 200, 255, 255, 50, false, true, 2, nil, nil, false)
+		--DrawMarker(1, coord.x, coord.y, coord.z-0.4, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 1.0, 1.0, 1.0, 200, 255, 255, 50, false, true, 2, nil, nil, false)
 	end
 	lib.zones.box({
 		coords = vec3(data.coord.x,data.coord.y,data.coord.z),
@@ -1658,7 +1658,7 @@ RegisterNUICallback("Close",function(data, cb)
             local dist = #(vector3(v.shop_x,v.shop_y,v.shop_z) - GetEntityCoords(ped))
             if id == v.name then
                 FreezeEntityPosition(PlayerPedId(),true)
-                SetEntityCoords(ped, v.shop_x,v.shop_y,v.shop_z, 0, 0, 0, false)  
+                SetEntityCoords(ped, v.shop_x,v.shop_y+1,v.shop_z, 0, 0, 0, false)  
                 while not HasCollisionLoadedAroundEntity(PlayerPedId()) do Wait(0) end
                 FreezeEntityPosition(PlayerPedId(),false)
             end

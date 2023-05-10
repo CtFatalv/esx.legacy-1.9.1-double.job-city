@@ -23,46 +23,6 @@ function cleanPlayer(playerPed)
 	ResetPedMovementClipset(playerPed, 0)
 end
 
-function OpenArmoryMenu(station)
-	local elements
-	if Config.OxInventory then
-		exports.ox_inventory:openInventory('stash', {id = 'society_police', owner = station})
-		return ESX.CloseContext()
-	else
-		elements = {
-			{unselectable = true, icon = "fas fa-gun", title = TranslateCap('armory')},
-			{icon = "fas fa-gun", title = TranslateCap('buy_weapons'), value = 'buy_weapons'}
-			
-		}
-
-		if Config.EnableArmoryManagement then
-			table.insert(elements, {icon = "fas fa-gun", title = TranslateCap('get_weapon'),     value = 'get_weapon'})
-			table.insert(elements, {icon = "fas fa-gun", title = TranslateCap('put_weapon'),     value = 'put_weapon'})
-			table.insert(elements, {icon = "fas fa-box", title = TranslateCap('remove_object'),  value = 'get_stock'})
-			table.insert(elements, {icon = "fas fa-box", title = TranslateCap('deposit_object'), value = 'put_stock'})
-		end
-	end
-
-	ESX.OpenContext("right", elements, function(menu,element)
-		local data = {current = element}
-		if data.current.value == 'get_weapon' then
-			OpenGetWeaponMenu()
-		elseif data.current.value == 'put_weapon' then
-			OpenPutWeaponMenu()
-		elseif data.current.value == 'buy_weapons' then
-			OpenBuyWeaponsMenu()
-		elseif data.current.value == 'put_stock' then
-			OpenPutStocksMenu()
-		elseif data.current.value == 'get_stock' then
-			OpenGetStocksMenu()
-		end
-	end, function(menu)
-		CurrentAction     = 'menu_armory'
-		CurrentActionMsg  = TranslateCap('open_armory')
-		CurrentActionData = {station = station}
-	end)
-end
-
 function OpenPoliceActionsMenu()
 	local elements = {
 		{unselectable = true, icon = "fas fa-police", title = "Police"},
@@ -469,173 +429,6 @@ function OpenVehicleInfosMenu(vehicleData)
 	end, vehicleData.plate)
 end
 
-function OpenGetWeaponMenu()
-	ESX.TriggerServerCallback('esx_policejob:getArmoryWeapons', function(weapons)
-		local elements = {
-			{unselectable = true, icon = "fas fa-gun", title = TranslateCap('get_weapon_menu')}
-		}
-
-		for i=1, #weapons, 1 do
-			if weapons[i].count > 0 then
-				elements[#elements+1] = {
-					icon = "fas fa-gun",
-					title = 'x' .. weapons[i].count .. ' ' .. ESX.GetWeaponLabel(weapons[i].name),
-					value = weapons[i].name
-				}
-			end
-		end
-
-		ESX.OpenContext("right", elements, function(menu,element)
-			local data = {current = element}
-			ESX.TriggerServerCallback('esx_policejob:removeArmoryWeapon', function()
-				ESX.CloseContext()
-				OpenGetWeaponMenu()
-			end, data.current.value)
-		end)
-	end)
-end
-
-function OpenPutWeaponMenu()
-	local elements   = {
-		{unselectable = true, icon = "fas fa-gun", title = TranslateCap('put_weapon_menu')}
-	}
-	local playerPed  = PlayerPedId()
-	local weaponList = ESX.GetWeaponList()
-
-	for i=1, #weaponList, 1 do
-		local weaponHash = joaat(weaponList[i].name)
-
-		if HasPedGotWeapon(playerPed, weaponHash, false) and weaponList[i].name ~= 'WEAPON_UNARMED' then
-			elements[#elements+1] = {
-				icon = "fas fa-gun",
-				title = weaponList[i].label,
-				value = weaponList[i].name
-			}
-		end
-	end
-
-	ESX.OpenContext("right", elements, function(menu,element)
-		local data = {current = element}
-		ESX.TriggerServerCallback('esx_policejob:addArmoryWeapon', function()
-			ESX.CloseContext()
-			OpenPutWeaponMenu()
-		end, data.current.value, true)
-	end)
-end
-
-function OpenWeaponComponentShop(components, weaponName, parentShop)
-
-	ESX.OpenContext("right", components, function(menu,element)
-		local data = {current = element}
-		if data.current.hasComponent then
-			ESX.ShowNotification(TranslateCap('armory_hascomponent'))
-		else
-			ESX.TriggerServerCallback('esx_policejob:buyWeapon', function(bought)
-				if bought then
-					if data.current.price > 0 then
-						ESX.ShowNotification(TranslateCap('armory_bought', data.current.componentLabel, ESX.Math.GroupDigits(data.current.price)))
-					end
-
-					menu.close()
-					parentShop.close()
-					OpenBuyWeaponsMenu()
-				else
-					ESX.ShowNotification(TranslateCap('armory_money'))
-				end
-			end, weaponName, 2, data.current.componentNum)
-		end
-	end)
-end
-
-function OpenGetStocksMenu()
-	ESX.TriggerServerCallback('esx_policejob:getStockItems', function(items)
-		local elements = {
-			{unselectable = true, icon = "fas fa-box", title = TranslateCap('police_stock')}
-		}
-
-		for i=1, #items, 1 do
-			elements[#elements+1] = {
-				icon = "fas fa-box",
-				title = 'x' .. items[i].count .. ' ' .. items[i].label,
-				value = items[i].name
-			}
-		end
-
-		ESX.OpenContext("right", elements, function(menu,element)
-			local data = {current = element}
-			local itemName = data.current.value
-
-			local elements2 = {
-				{unselectable = true, icon = "fas fa-box", title = element.title},
-				{title = TranslateCap('quantity'), input = true, inputType = "number", inputMin = 1, inputMax = 150, inputPlaceholder = "Amount to withdraw.."},
-				{icon = "fas fa-check-double", title = "Confirm", value = "confirm"}
-			}
-
-			ESX.OpenContext("right", elements2, function(menu2,element2)
-				local data2 = {value = menu2.eles[2].inputValue}
-				local count = tonumber(data2.value)
-
-				if not count then
-					ESX.ShowNotification(TranslateCap('quantity_invalid'))
-				else
-					ESX.CloseContext()
-					TriggerServerEvent('esx_policejob:getStockItem', itemName, count)
-
-					Wait(300)
-					OpenGetStocksMenu()
-				end
-			end)
-		end)
-	end)
-end
-
-function OpenPutStocksMenu()
-	ESX.TriggerServerCallback('esx_policejob:getPlayerInventory', function(inventory)
-		local elements = {
-			{unselectable = true, icon = "fas fa-box", title = TranslateCap('inventory')}
-		}
-
-		for i=1, #inventory.items, 1 do
-			local item = inventory.items[i]
-
-			if item.count > 0 then
-				elements[#elements+1] = {
-					icon = "fas fa-box",
-					title = item.label .. ' x' .. item.count,
-					type = 'item_standard',
-					value = item.name
-				}
-			end
-		end
-
-		ESX.OpenContext("right", elements, function(menu,element)
-			local data = {current = element}
-			local itemName = data.current.value
-
-			local elements2 = {
-				{unselectable = true, icon = "fas fa-box", title = element.title},
-				{title = TranslateCap('quantity'), input = true, inputType = "number", inputMin = 1, inputMax = 150, inputPlaceholder = "Amount to withdraw.."},
-				{icon = "fas fa-check-double", title = "Confirm", value = "confirm"}
-			}
-
-			ESX.OpenContext("right", elements2, function(menu2,element2)
-				local data2 = {value = menu2.eles[2].inputValue}
-				local count = tonumber(data2.value)
-
-				if not count then
-					ESX.ShowNotification(TranslateCap('quantity_invalid'))
-				else
-					ESX.CloseContext()
-					TriggerServerEvent('esx_policejob:putStockItems', itemName, count)
-
-					Wait(300)
-					OpenPutStocksMenu()
-				end
-			end)
-		end)
-	end)
-end
-
 RegisterNetEvent('esx:setJob')
 AddEventHandler('esx:setJob', function(job)
 	ESX.PlayerData.job = job
@@ -663,67 +456,6 @@ AddEventHandler('esx_phone:cancelMessage', function(dispatchNumber)
 		if Config.EnableESXService and not playerInService then
 			CancelEvent()
 		end
-	end
-end)
-
-AddEventHandler('esx_policejob:hasEnteredMarker', function(station, part, partNum)
-	if part == 'Cloakroom' then
-		CurrentAction     = 'menu_cloakroom'
-		CurrentActionMsg  = TranslateCap('open_cloackroom')
-		CurrentActionData = {}
-	elseif part == 'Armory' then
-		CurrentAction     = 'menu_armory'
-		CurrentActionMsg  = TranslateCap('open_armory')
-		CurrentActionData = {station = station}
-	elseif part == 'Vehicles' then
-		CurrentAction     = 'menu_vehicle_spawner'
-		CurrentActionMsg  = TranslateCap('garage_prompt')
-		CurrentActionData = {station = station, part = part, partNum = partNum}
-	elseif part == 'Helicopters' then
-		CurrentAction     = 'Helicopters'
-		CurrentActionMsg  = TranslateCap('helicopter_prompt')
-		CurrentActionData = {station = station, part = part, partNum = partNum}
-	elseif part == 'BossActions' then
-		CurrentAction     = 'menu_boss_actions'
-		CurrentActionMsg  = TranslateCap('open_bossmenu')
-		CurrentActionData = {}
-	end
-end)
-
-AddEventHandler('esx_policejob:hasExitedMarker', function(station, part, partNum)
-	if not isInShopMenu then
-		ESX.CloseContext()
-	end
-
-	CurrentAction = nil
-end)
-
-AddEventHandler('esx_policejob:hasEnteredEntityZone', function(entity)
-	local playerPed = PlayerPedId()
-
-	if ESX.PlayerData.job and ESX.PlayerData.job.name == 'police' and IsPedOnFoot(playerPed) then
-		CurrentAction     = 'remove_entity'
-		CurrentActionMsg  = TranslateCap('remove_prop')
-		CurrentActionData = {entity = entity}
-	end
-
-	if GetEntityModel(entity) == `p_ld_stinger_s` then
-		local playerPed = PlayerPedId()
-		local coords    = GetEntityCoords(playerPed)
-
-		if IsPedInAnyVehicle(playerPed, false) then
-			local vehicle = GetVehiclePedIsIn(playerPed)
-
-			for i=0, 7, 1 do
-				SetVehicleTyreBurst(vehicle, i, true, 1000)
-			end
-		end
-	end
-end)
-
-AddEventHandler('esx_policejob:hasExitedEntityZone', function(entity)
-	if CurrentAction == 'remove_entity' then
-		CurrentAction = nil
 	end
 end)
 
@@ -942,72 +674,6 @@ CreateThread(function()
 	end
 end)
 
--- Draw markers and more
-CreateThread(function()
-	while true do
-		local Sleep = 1500
-		if ESX.PlayerData.job and ESX.PlayerData.job.name == 'police' then
-			Sleep = 500
-			local playerPed = PlayerPedId()
-			local playerCoords = GetEntityCoords(playerPed)
-			local isInMarker, hasExited = false, false
-			local currentStation, currentPart, currentPartNum
-
-			for k,v in pairs(Config.PoliceStations) do
-
-				for i=1, #v.Vehicles, 1 do
-					local distance = #(playerCoords - v.Vehicles[i].Spawner)
-
-					if distance < Config.DrawDistance then
-						DrawMarker(Config.MarkerType.Vehicles, v.Vehicles[i].Spawner, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, Config.MarkerColor.r, Config.MarkerColor.g, Config.MarkerColor.b, 100, false, true, 2, true, false, false, false)
-						Sleep = 0
-
-						if distance < Config.MarkerSize.x then
-							isInMarker, currentStation, currentPart, currentPartNum = true, k, 'Vehicles', i
-						end
-					end
-				end
-
-				for i=1, #v.Helicopters, 1 do
-					local distance =  #(playerCoords - v.Helicopters[i].Spawner)
-
-					if distance < Config.DrawDistance then
-						DrawMarker(Config.MarkerType.Helicopters, v.Helicopters[i].Spawner, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, Config.MarkerColor.r, Config.MarkerColor.g, Config.MarkerColor.b, 100, false, true, 2, true, false, false, false)
-						Sleep = 0
-
-						if distance < Config.MarkerSize.x then
-							isInMarker, currentStation, currentPart, currentPartNum = true, k, 'Helicopters', i
-						end
-					end
-				end
-			end
-
-			if isInMarker and not HasAlreadyEnteredMarker or (isInMarker and (LastStation ~= currentStation or LastPart ~= currentPart or LastPartNum ~= currentPartNum)) then
-				if
-					(LastStation and LastPart and LastPartNum) and
-					(LastStation ~= currentStation or LastPart ~= currentPart or LastPartNum ~= currentPartNum)
-				then
-					TriggerEvent('esx_policejob:hasExitedMarker', LastStation, LastPart, LastPartNum)
-					hasExited = true
-				end
-
-				HasAlreadyEnteredMarker = true
-				LastStation             = currentStation
-				LastPart                = currentPart
-				LastPartNum             = currentPartNum
-
-				TriggerEvent('esx_policejob:hasEnteredMarker', currentStation, currentPart, currentPartNum)
-			end
-
-			if not hasExited and not isInMarker and HasAlreadyEnteredMarker then
-				HasAlreadyEnteredMarker = false
-				TriggerEvent('esx_policejob:hasExitedMarker', LastStation, LastPart, LastPartNum)
-			end
-		end
-	Wait(Sleep)
-	end
-end)
-
 -- Enter / Exit entity zone events
 CreateThread(function()
 	local trackedEntities = {
@@ -1057,58 +723,6 @@ CreateThread(function()
 			end
 		Wait(Sleep)
 	end
-end)
-
-ESX.RegisterInput("police:interact", "(ESX PoliceJob) Interact", "keyboard", "E", function()
-	if not CurrentAction then 
-		return 
-	end
-
-	if not ESX.PlayerData.job or (ESX.PlayerData.job and not ESX.PlayerData.job.name == 'police') then
-		return
-	end
-	if CurrentAction == 'menu_cloakroom' then
-		OpenCloakroomMenu()
-	elseif CurrentAction == 'menu_armory' then
-		if not Config.EnableESXService then
-			OpenArmoryMenu(CurrentActionData.station)
-		elseif playerInService then
-			OpenArmoryMenu(CurrentActionData.station)
-		else
-			ESX.ShowNotification(TranslateCap('service_not'))
-		end
-	elseif CurrentAction == 'menu_vehicle_spawner' then
-		if not Config.EnableESXService then
-			OpenVehicleSpawnerMenu('car', CurrentActionData.station, CurrentActionData.part, CurrentActionData.partNum)
-		elseif playerInService then
-			OpenVehicleSpawnerMenu('car', CurrentActionData.station, CurrentActionData.part, CurrentActionData.partNum)
-		else
-			ESX.ShowNotification(TranslateCap('service_not'))
-		end
-	elseif CurrentAction == 'Helicopters' then
-		if not Config.EnableESXService then
-			OpenVehicleSpawnerMenu('helicopter', CurrentActionData.station, CurrentActionData.part, CurrentActionData.partNum)
-		elseif playerInService then
-			OpenVehicleSpawnerMenu('helicopter', CurrentActionData.station, CurrentActionData.part, CurrentActionData.partNum)
-		else
-			ESX.ShowNotification(TranslateCap('service_not'))
-		end
-	elseif CurrentAction == 'delete_vehicle' then
-		ESX.Game.DeleteVehicle(CurrentActionData.vehicle)
-	elseif CurrentAction == 'menu_boss_actions' then
-		ESX.CloseContext()
-		TriggerEvent('esx_society:openBossMenu', 'police', function(data, menu)
-			menu.close()
-
-			CurrentAction     = 'menu_boss_actions'
-			CurrentActionMsg  = TranslateCap('open_bossmenu')
-			CurrentActionData = {}
-		end, { wash = false }) -- disable washing money
-	elseif CurrentAction == 'remove_entity' then
-		DeleteEntity(CurrentActionData.entity)
-	end
-
-	CurrentAction = nil
 end)
 
 ESX.RegisterInput("police:quickactions", "(ESX PoliceJob) Quick Actions", "keyboard", "F6", function()
@@ -1270,4 +884,9 @@ exports.ox_target:addBoxZone({
 AddEventHandler('esx_policejob:bossMenu', function()
     TriggerEvent('esx_society:openBossMenu', 'police', function(data, menu)
     end, {wash = false})
+end)
+
+
+AddEventHandler('esx_policejob:policeaction', function()
+    OpenPoliceActionsMenu()
 end)
