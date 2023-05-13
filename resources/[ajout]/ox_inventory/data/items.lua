@@ -216,17 +216,101 @@ return {
 		weight = 80,
 	},
     
-    ['handcuffs'] = {
-      label = 'Handcuffs',
+    ['menotte'] = {
+      label = 'Menotte',
       weight = 100,
       stack = false,
       allowArmed = true
     },
     
-    ['rope'] = {
-      label = 'Rope',
+    ['clemenotte'] = {
+      label = 'Clé de menotte',
       weight = 100,
       stack = false,
       allowArmed = true
     },
+
+	['weed'] = {
+		label = 'Weed',
+		stack = true,
+		weight = 10,
+	},
+
+	['weed_pooch'] = {
+		label = 'Pochon de weed',
+		stack = true,
+		weight = 10,
+	},
+
+	['coke'] = {
+		label = 'Coke',
+		stack = true,
+		weight = 10,
+	},
+
+	['coke_pooch'] = {
+		label = 'Pochon de coke',
+		stack = true,
+		weight = 10,
+	},
+
+	['meth'] = {
+		label = 'Meth',
+		stack = true,
+		weight = 10,
+	},
+
+	['meth_pooch'] = {
+		label = 'Pochon de meth',
+		stack = true,
+		weight = 10,
+	},
+
+	['thermal_charge'] = {
+		label = 'Charge Thermique',
+		stack = true,
+		weight = 10,
+	},
+
+	['cash_wad'] = {
+		label = 'Liasse de billet',
+		stack = true,
+		weight = 10,
+	},
+
+	['gold_bar'] = {
+		label = 'Lingot d\'or',
+		stack = true,
+		weight = 10,
+	},
+
+	['diamant_box'] = {
+		label = 'Boite de diamants',
+		stack = true,
+		weight = 10,
+	},
+
+	['id_card'] = {
+		label = 'Carte ID',
+		stack = true,
+		weight = 10,
+	},
+
+	['id_card2'] = {
+		label = 'Carte ID 2',
+		stack = true,
+		weight = 10,
+	},
+
+	['rasperry'] = {
+		label = 'Rasberry PI',
+		stack = true,
+		weight = 10,
+	},
+
+	['jewels'] = {
+		label = 'Bijoux',
+		stack = true,
+		weight = 10,
+	},
 }

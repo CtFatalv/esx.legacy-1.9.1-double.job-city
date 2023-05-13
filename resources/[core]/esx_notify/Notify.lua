@@ -1,8 +1,5 @@
 local Debug = ESX.GetConfig().EnableDebug
 
----@param type string the notification type
----@param length number the length of the notification
----@param message any the message :D
 local function Notify(notificatonType, length, message)
 
     if Debug then

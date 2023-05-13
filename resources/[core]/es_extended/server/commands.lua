@@ -40,6 +40,23 @@ end, true, {help = TranslateCap('command_setjob'), validate = true, arguments = 
 	{name = 'grade2', help = TranslateCap('command_setjob_grade'), type = 'number'}	
 }})
 
+ESX.RegisterCommand('setjob3', 'admin', function(xPlayer, args, showError)
+	if ESX.DoesJob3Exist(args.job3, args.grade3) then
+		args.playerId.setJob3(args.job3, args.grade3)
+	else
+		showError(TranslateCap('command_setjob_invalid'))
+	end
+	ESX.DiscordLogFields("UserActions", "/setjob3 Triggered", "pink", {
+		{name = "Player", value = xPlayer.name, inline = true},
+		{name = "Job3", value = args.job3, inline = true},
+    {name = "Grade3", value = args.grade3, inline = true}
+	})
+end, true, {help = TranslateCap('command_setjob'), validate = true, arguments = {
+	{name = 'playerId', help = TranslateCap('commandgeneric_playerid'), type = 'player'},
+	{name = 'job3', help = TranslateCap('command_setjob_job'), type = 'string'},
+	{name = 'grade3', help = TranslateCap('command_setjob_grade'), type = 'number'}	
+}})
+
 local upgrades = Config.SpawnVehMaxUpgrades and
     {
         plate = "ADMINCAR",
@@ -257,6 +274,10 @@ ESX.RegisterCommand('job2', {"user", "admin"}, function(xPlayer, args, showError
 	print(xPlayer.getName()..", You are currently: ^5".. xPlayer.getJob2().name.. "^0 - ^5".. xPlayer.getJob2().grade_label .. "^0")
 end, true)
 
+ESX.RegisterCommand('job3', {"user", "admin"}, function(xPlayer, args, showError)
+	print(xPlayer.getName()..", You are currently: ^5".. xPlayer.getJob3().name.. "^0 - ^5".. xPlayer.getJob3().grade_label .. "^0")
+end, true)
+
 ESX.RegisterCommand('info', {"user", "admin"}, function(xPlayer, args, showError)
 	local job = xPlayer.getJob().name
 	local jobgrade = xPlayer.getJob().grade_name
@@ -267,6 +288,12 @@ ESX.RegisterCommand('info2', {"user", "admin"}, function(xPlayer, args, showErro
 	local job2 = xPlayer.getJob2().name
 	local job2grade = xPlayer.getJob2().grade_name
 	print("^2ID : ^5"..xPlayer.source.." ^0| ^2Name:^5"..xPlayer.getName().." ^0 | ^2Group:^5"..xPlayer.getGroup().."^0 | ^2Job2:^5".. job2.."^0")
+end, true)
+
+ESX.RegisterCommand('info3', {"user", "admin"}, function(xPlayer, args, showError)
+	local job3 = xPlayer.getJob3().name
+	local job3grade = xPlayer.getJob3().grade_name
+	print("^2ID : ^5"..xPlayer.source.." ^0| ^2Name:^5"..xPlayer.getName().." ^0 | ^2Group:^5"..xPlayer.getGroup().."^0 | ^2Job3:^5".. job3.."^0")
 end, true)
 
 ESX.RegisterCommand('coords', "admin", function(xPlayer, args, showError)

@@ -4,21 +4,21 @@ dragStatus = {}
 dragStatus.isDragged =  false
 
 AddEventHandler('handcuff', function(data)
-	local handcuffs = exports.ox_inventory:Search('count', 'handcuffs')
-	local rope = exports.ox_inventory:Search('count', 'rope')
-	if ESX.PlayerData.job and ESX.PlayerData.job.name == 'police' and handcuffs >= 1 or rope >= 1 and IsEntityPlayingAnim(data.entity, "missminuteman_1ig_2", "handsup_base", 3) then
+	local handcuffs = exports.ox_inventory:Search('count', 'menotte')
+	local rope = exports.ox_inventory:Search('count', 'clemenotte')
+	--if ESX.PlayerData.job and ESX.PlayerData.job.name == 'police' and handcuffs >= 1 or rope >= 1 and IsEntityPlayingAnim(data.entity, "missminuteman_1ig_2", "handsup_base", 3) then
 		TriggerServerEvent('esx_interact:handcuff', GetPlayerServerId(NetworkGetPlayerIndexFromPed(data.entity)))
-	else
-		lib.notify({
-			description = Config.RequiredItem,
-			style = {
-				backgroundColor = '#000000',
-				color = '#ffffff'
-			},
-			icon = 'people-robbery',
-			type = 'error'
-		})
-	end
+	--else
+	--	lib.notify({
+	--		description = Config.RequiredItem,
+	--		style = {
+	--			backgroundColor = '#000000',
+	--			color = '#ffffff'
+	--		},
+	--		icon = 'people-robbery',
+	--		type = 'error'
+	--	})
+	--end
 end)
 
 RegisterNetEvent('esx_interact:handcuff')
@@ -343,10 +343,68 @@ exports.ox_target:addGlobalPlayer({
 })
 
 exports.ox_target:addGlobalVehicle({
+            {
+                type = "client",
+                event = "request:CuffPed",
+                icon = "fas fa-hands",
+                label = "Cuff / Uncuff",
+                item = 'menotte',
+                --job = "police",
+            },
+            {
+                type = "client",
+                event = "request:CuffPed",
+                icon = "fas fa-hands",
+                label = "Cuff / Uncuff",
+                item = 'clemenotte',
+                --job = "police",
+            },
+})
+
+--[[
+Citizen.CreateThread(function()
+	while true do
+	Citizen.Wait(0)
+	if ESX.PlayerData.job and ESX.PlayerData.job.name == 'police' then
+        exports.ox_target:addGlobalVehicle({
+            {
+                event = "outveh",
+                icon = Config.outveh_img,
+                label = Config.outveh,
+                num = 1
+            },
+        })
+			print(123)
+                
+		else
+			print(1234)
+		end
+	end
+	Citizen.Wait(10000)
+end)
+]]
+--[[
+exports.ox_target:addGlobalVehicle(
+	{
+
+	if ESX.PlayerData.job and ESX.PlayerData.job.name == 'police' then
 	{
 		event = "outveh",
 		icon = Config.outveh_img,
 		label = Config.outveh,
 		num = 1
-	},
+	},	
+
+	else
+	lib.notify({
+		description = Config.RequiredItem,
+		style = {
+			backgroundColor = '#000000',
+			color = '#ffffff'
+		},
+		icon = 'people-robbery',
+		type = 'error'
+	})
+	end
 })
+]]

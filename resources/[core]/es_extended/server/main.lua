@@ -1,8 +1,9 @@
 SetMapName('San Andreas')
 SetGameType('ESX Legacy')
 
+local oneSyncState = GetConvar('onesync', 'off')
 local newPlayer = 'INSERT INTO `users` SET `accounts` = ?, `identifier` = ?, `group` = ?'
-local loadPlayer = 'SELECT `accounts`, `job`, `job_grade`, `job2`, `job2_grade`, `group`, `position`, `inventory`, `skin`, `loadout`'
+local loadPlayer = 'SELECT `accounts`, `job`, `job_grade`, `job2`, `job2_grade`, `job3`, `job3_grade`, `group`, `position`, `inventory`, `skin`, `loadout`, `metadata`'
 
 if Config.Multichar then
   newPlayer = newPlayer .. ', `firstname` = ?, `lastname` = ?, `dateofbirth` = ?, `sex` = ?, `height` = ?'
@@ -55,6 +56,7 @@ function onPlayerJoined(playerId)
       if result then
         loadESXPlayer(identifier, playerId, false)
       else
+        
         createESXPlayer(identifier, playerId)
       end
     end
@@ -71,11 +73,10 @@ function createESXPlayer(identifier, playerId, data)
     accounts[account] = money
   end
 
+  local defaultGroup = "user"
   if Core.IsPlayerAdmin(playerId) then
     print(('[^2INFO^0] Player ^5%s^0 Has been granted admin permissions via ^5Ace Perms^7.'):format(playerId))
     defaultGroup = "admin"
-  else
-    defaultGroup = "user"
   end
 
   if not Config.Multichar then
@@ -96,27 +97,35 @@ if not Config.Multichar then
     local playerId = source
     local identifier = ESX.GetIdentifier(playerId)
 
+    if oneSyncState == "off" or oneSyncState == "legacy" then
+      return deferrals.done(('[ESX] ESX Requires Onesync Infinity to work. This server currently has Onesync set to: %s'):format(oneSyncState))
+    end
+
+    if not Core.DatabaseConnected then
+      return deferrals.done(('[ESX] ESX Cannot Connect to your database. Please make sure it is correctly configured in your server.cfg'):format(oneSyncState))
+    end
+    
     if identifier then
       if ESX.GetPlayerFromIdentifier(identifier) then
-        deferrals.done(
+        return deferrals.done(
           ('[ESX] There was an error loading your character!\nError code: identifier-active\n\nThis error is caused by a player on this server who has the same identifier as you have. Make sure you are not playing on the same account.\n\nYour identifier: %s'):format(
             identifier))
       else
-        deferrals.done()
+        return deferrals.done()
       end
     else
-      deferrals.done(
+      return deferrals.done(
         '[ESX] There was an error loading your character!\nError code: identifier-missing\n\nThe cause of this error is not known, your identifier could not be found. Please come back later or report this problem to the server administration team.')
     end
   end)
 end
 
 function loadESXPlayer(identifier, playerId, isNew)
-  local userData = {accounts = {}, inventory = {}, job = {}, job2 = {}, loadout = {}, playerName = GetPlayerName(playerId), weight = 0}
-
+  local userData = {accounts = {}, inventory = {}, job = {}, job2 = {}, job3 = {}, loadout = {}, playerName = GetPlayerName(playerId), weight = 0, metadata = {}}
   local result = MySQL.prepare.await(loadPlayer, {identifier})
   local job, grade, jobObject, gradeObject = result.job, tostring(result.job_grade)
   local job2, grade2, job2Object, grade2Object = result.job2, tostring(result.job2_grade)
+  local job3, grade3, job3Object, grade3Object = result.job3, tostring(result.job3_grade)
   local foundAccounts, foundItems = {}, {}
 
   -- Accounts
@@ -198,6 +207,34 @@ function loadESXPlayer(identifier, playerId, isNew)
     userData.job2.skin_female = json.decode(grade2Object.skin_female)
   end
 
+  -- Job3
+  if ESX.DoesJob3Exist(job3, grade3) then
+    job3Object, grade3Object = ESX.Jobs[job3], ESX.Jobs[job3].grades[grade3]
+  else
+    print(('[^3WARNING^7] Ignoring invalid job3 for ^5%s^7 [job3: ^5%s^7, grade3: ^5%s^7]'):format(identifier, job3, grade3))
+    job3, grade3 = 'unemployed3', '0'
+    job3Object, grade3Object = ESX.Jobs[job3], ESX.Jobs[job3].grades[grade3]
+  end
+
+  userData.job3.id = job3Object.id
+  userData.job3.name = job3Object.name
+  userData.job3.label = job3Object.label
+
+  userData.job3.grade = tonumber(grade3)
+  userData.job3.grade_name = grade3Object.name
+  userData.job3.grade_label = grade3Object.label
+  userData.job3.grade_salary = grade3Object.salary
+
+  userData.job3.skin_male = {}
+  userData.job3.skin_female = {}
+
+  if gradeObject.skin_male then
+    userData.job3.skin_male = json.decode(grade3Object.skin_male)
+  end
+  if gradeObject.skin_female then
+    userData.job3.skin_female = json.decode(grade3Object.skin_female)
+  end
+
   -- Inventory
   if not Config.OxInventory then
     if result.inventory and result.inventory ~= '' then
@@ -272,12 +309,7 @@ function loadESXPlayer(identifier, playerId, isNew)
   end
 
   -- Position
-  if result.position and result.position ~= '' then
-    userData.coords = json.decode(result.position)
-  else
-    print('[^3WARNING^7] Column ^5"position"^0 in ^5"users"^0 table is missing required default value. Using backup coords, fix your database.')
-    userData.coords = {x = -269.4, y = -955.3, z = 31.2, heading = 205.8}
-  end
+  userData.coords = json.decode(result.position) or Config.DefaultSpawn
 
   -- Skin
   if result.skin and result.skin ~= '' then
@@ -306,9 +338,15 @@ function loadESXPlayer(identifier, playerId, isNew)
     end
   end
 
-  local xPlayer = CreateExtendedPlayer(playerId, identifier, userData.group, userData.accounts, userData.inventory, userData.weight, userData.job, userData.job2,
-    userData.loadout, userData.playerName, userData.coords)
+  if result.metadata and result.metadata ~= '' then
+    local metadata = json.decode(result.metadata)
+    userData.metadata = metadata
+  end
+
+  local xPlayer = CreateExtendedPlayer(playerId, identifier, userData.group, userData.accounts, userData.inventory, userData.weight, userData.job, userData.job2, userData.job3,
+    userData.loadout, userData.playerName, userData.coords, userData.metadata)
   ESX.Players[playerId] = xPlayer
+  Core.playersByIdentifier[identifier] = xPlayer
 
   if userData.firstname then
     xPlayer.set('firstName', userData.firstname)
@@ -334,15 +372,17 @@ function loadESXPlayer(identifier, playerId, isNew)
       inventory = xPlayer.getInventory(),
       job = xPlayer.getJob(),
 			job2 = xPlayer.getJob2(),
+			job3 = xPlayer.getJob3(),
       loadout = xPlayer.getLoadout(),
       maxWeight = xPlayer.getMaxWeight(),
       money = xPlayer.getMoney(),
       sex = xPlayer.get("sex") or "m",
-	  firstName = xPlayer.get("firstName") or "John",
-	  lastName = xPlayer.get("lastName") or "Doe",
-	  dateofbirth = xPlayer.get("dateofbirth") or "01/01/2000",
-	  height = xPlayer.get("height") or 120,
-      dead = false
+      firstName = xPlayer.get("firstName") or "John",
+      lastName = xPlayer.get("lastName") or "Doe",
+      dateofbirth = xPlayer.get("dateofbirth") or "01/01/2000",
+      height = xPlayer.get("height") or 120,
+      dead = false,
+      metadata = xPlayer.getMeta()
     }, isNew,
     userData.skin)
 
@@ -372,6 +412,7 @@ AddEventHandler('playerDropped', function(reason)
   if xPlayer then
     TriggerEvent('esx:playerDropped', playerId, reason)
 
+    Core.playersByIdentifier[xPlayer.identifier] = nil
     Core.SavePlayer(xPlayer, function()
       ESX.Players[playerId] = nil
     end)
@@ -383,6 +424,7 @@ AddEventHandler('esx:playerLogout', function(playerId, cb)
   if xPlayer then
     TriggerEvent('esx:playerDropped', playerId)
 
+    Core.playersByIdentifier[xPlayer.identifier] = nil
     Core.SavePlayer(xPlayer, function()
       ESX.Players[playerId] = nil
       if cb then
@@ -611,8 +653,8 @@ end
 ESX.RegisterServerCallback('esx:getPlayerData', function(source, cb)
   local xPlayer = ESX.GetPlayerFromId(source)
 
-  cb({identifier = xPlayer.identifier, accounts = xPlayer.getAccounts(), inventory = xPlayer.getInventory(), job = xPlayer.getJob(), job2 = xPlayer.getJob2(),
-      loadout = xPlayer.getLoadout(), money = xPlayer.getMoney(), position = xPlayer.getCoords(true)})
+  cb({identifier = xPlayer.identifier, accounts = xPlayer.getAccounts(), inventory = xPlayer.getInventory(), job = xPlayer.getJob(), job2 = xPlayer.getJob2(), job3 = xPlayer.getJob3(),
+      loadout = xPlayer.getLoadout(), money = xPlayer.getMoney(), position = xPlayer.getCoords(true), metadata = xPlayer.getMeta()})
 end)
 
 ESX.RegisterServerCallback('esx:isUserAdmin', function(source, cb)
@@ -626,8 +668,8 @@ end)
 ESX.RegisterServerCallback('esx:getOtherPlayerData', function(source, cb, target)
   local xPlayer = ESX.GetPlayerFromId(target)
 
-  cb({identifier = xPlayer.identifier, accounts = xPlayer.getAccounts(), inventory = xPlayer.getInventory(), job = xPlayer.getJob(), job2 = xPlayer.getJob2(),
-      loadout = xPlayer.getLoadout(), money = xPlayer.getMoney(), position = xPlayer.getCoords(true)})
+  cb({identifier = xPlayer.identifier, accounts = xPlayer.getAccounts(), inventory = xPlayer.getInventory(), job = xPlayer.getJob(), job2 = xPlayer.getJob2(), job3 = xPlayer.getJob3(),
+      loadout = xPlayer.getLoadout(), money = xPlayer.getMoney(), position = xPlayer.getCoords(true), metadata = xPlayer.getMeta()})
 end)
 
 ESX.RegisterServerCallback('esx:getPlayerNames', function(source, cb, players)

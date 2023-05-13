@@ -1,7 +1,7 @@
 Config                            = {}
 
 Config.EnableHandcuffTimer        = true -- Enable handcuff timer? will unrestrain player after the time ends.
-Config.HandcuffTimer              = 10 * 60000 -- 10 minutes.
+Config.HandcuffTimer              = 60 * 60000 -- 10 minutes.
 Config.ShowNotificationText       = "La personne doit être menottée où lever les bras"
 Config.RequiredItem               = "Vous avez besoin de menotte ou d'une corde"
 Config.Unrestrained_timer         = "Vous sentez que vos menottes deviennent fragiles"

@@ -1,12 +1,8 @@
------------------For support, scripts, and more----------------
---------------- https://discord.gg/wasabiscripts  -------------
----------------------------------------------------------------
-
 Strings = {
-    sell_price = 'Sell Price',
+    sell_price = 'Prix de vente',
     amount_input = 'Amount',
     inventory = 'Inventory',
     success = 'Success',
-    item_stocked_desc = 'You stocked an item for $%s!',
+    item_stocked_desc = 'Vous avez stocké un article pour $%s!',
     
 }

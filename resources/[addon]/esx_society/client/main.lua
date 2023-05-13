@@ -13,6 +13,13 @@ AddEventHandler('esx:setJob2', function(job2)
 	RefreshBussHUD2()
 end)
 
+-- Triple Job
+RegisterNetEvent('esx:setJob3')
+AddEventHandler('esx:setJob3', function(job3)
+	ESX.PlayerData.job3 = job3
+	RefreshBussHUD3()
+end)
+
 RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
 	ESX.PlayerData = xPlayer
@@ -46,6 +53,19 @@ function RefreshBussHUD2()
 	end
 end
 
+-- triple Job
+function RefreshBussHUD3()
+	DisableSocietyMoneyHUDElement()
+
+	if ESX.PlayerData.job3.grade_name == 'boss' then
+		EnableSociety3MoneyHUDElement()
+
+		ESX.TriggerServerCallback('esx_society:getSocietyMoney', function(money)
+			UpdateSociety3MoneyHUDElement(money)
+		end, ESX.PlayerData.job3.name)
+	end
+end
+
 RegisterNetEvent('esx_addonaccount:setMoney')
 AddEventHandler('esx_addonaccount:setMoney', function(society, money)
 	if ESX.PlayerData.job and ESX.PlayerData.job.grade_name == 'boss' and 'society_' .. ESX.PlayerData.job.name == society then
@@ -54,6 +74,10 @@ AddEventHandler('esx_addonaccount:setMoney', function(society, money)
 -- Second Job
 	if ESX.PlayerData.job2 and ESX.PlayerData.job2.grade_name == 'boss' and 'society_' .. ESX.PlayerData.job2.name == society then
 		UpdateSociety2MoneyHUDElement(money)
+	end
+-- Triple Job
+	if ESX.PlayerData.job3 and ESX.PlayerData.job3.grade_name == 'boss' and 'society_' .. ESX.PlayerData.job3.name == society then
+		UpdateSociety3MoneyHUDElement(money)
 	end
 end)
 
@@ -82,6 +106,19 @@ function EnableSociety2MoneyHUDElement()
 	TriggerEvent('esx_society:toggleSocietyHud', true)
 end
 
+-- triple Job
+function EnableSociety3MoneyHUDElement()
+	local society3MoneyHUDElementTpl = '<div><img src="' .. base64MoneyIcon .. '" style="width:20px; height:20px; vertical-align:middle;">&nbsp;{{money}}</div>'
+
+	if ESX.GetConfig().EnableHud then
+		ESX.UI.HUD.RegisterElement('society3_money', 3, 0, society3MoneyHUDElementTpl, {
+			money = 0
+		})
+	end
+
+	TriggerEvent('esx_society:toggleSocietyHud', true)
+end
+
 function DisableSocietyMoneyHUDElement()
 	if ESX.GetConfig().EnableHud then
 		ESX.UI.HUD.RemoveElement('society_money')
@@ -94,6 +131,15 @@ end
 function DisableSociety2MoneyHUDElement()
 	if ESX.GetConfig().EnableHud then
 		ESX.UI.HUD.RemoveElement('society2_money')
+	end
+
+	TriggerEvent('esx_society:toggleSocietyHud', false)
+end
+
+-- Triple Job
+function DisableSociety3MoneyHUDElement()
+	if ESX.GetConfig().EnableHud then
+		ESX.UI.HUD.RemoveElement('society3_money')
 	end
 
 	TriggerEvent('esx_society:toggleSocietyHud', false)
@@ -118,6 +164,17 @@ function UpdateSociety2MoneyHUDElement(money)
 	end
 
 	TriggerEvent('esx_society:setSociety2Money', money)
+end
+
+-- Triple Job
+function UpdateSociety3MoneyHUDElement(money)
+	if ESX.GetConfig().EnableHud then
+		ESX.UI.HUD.UpdateElement('society3_money', {
+			money = ESX.Math.GroupDigits(money)
+		})
+	end
+
+	TriggerEvent('esx_society:setSociety3Money', money)
 end
 
 function OpenBossMenu(society, close, options)
@@ -343,6 +400,118 @@ function OpenBossMenu2(society, close, options)
 	end, society)
 end
 
+-- triple Job
+function OpenBossMenu3(society, close, options)
+	options = options or {}
+	local elements = {
+		{unselectable = true, icon = "fas fa-user", title = TranslateCap('boss_menu')}
+	}
+
+	ESX.TriggerServerCallback('esx_society:isBoss3', function(isBoss)
+		if isBoss then
+			local defaultOptions = {
+				checkBal = true,
+				withdraw = true,
+				deposit = true,
+				wash = true,
+				employees = true,
+				salary = true,
+				grades = true
+			}
+
+			for k,v in pairs(defaultOptions) do
+				if options[k] == nil then
+					options[k] = v
+				end
+			end
+
+			if options.checkBal then
+				elements[#elements+1] = {icon = "fas fa-wallet", title = TranslateCap('check_society_balance'), value = "check_society_balance"}
+			end
+			if options.withdraw then
+				elements[#elements+1] = {icon = "fas fa-wallet", title = TranslateCap('withdraw_society_money'), value = "withdraw_society_money"}
+			end
+			if options.deposit then
+				elements[#elements+1] = {icon = "fas fa-wallet", title = TranslateCap('deposit_society_money'), value = "deposit_money"}
+			end
+			if options.wash then
+				elements[#elements+1] = {icon = "fas fa-wallet", title = TranslateCap('wash_money'), value = "wash_money"}
+			end
+			if options.employees then
+				elements[#elements+1] = {icon = "fas fa-users", title = TranslateCap('employee_management'), value = "trois_manage_employees"}
+			end
+			if options.salary then
+				elements[#elements+1] = {icon = "fas fa-wallet", title = TranslateCap('salary_management'), value = "manage_salary"}
+			end
+			if options.grades then
+				elements[#elements+1] = {icon = "fas fa-scroll", title = TranslateCap('grade_management'), value = "manage_grades"}
+			end
+
+			ESX.OpenContext("right", elements, function(menu,element)
+				if element.value == "check_society_balance" then
+					TriggerServerEvent('esx_society:checkSocietyBalance3', society)
+				elseif element.value == "withdraw_society_money" then
+					local elements = {
+						{unselectable = true, icon = "fas fa-wallet", title = TranslateCap('withdraw_amount'), description = "Retirer de l'argent du compte de la société"},
+						{icon = "fas fa-wallet", title = "Montant", input = true, inputType = "number", inputPlaceholder = "Montant à retirer..", inputMin = 1, inputMax = 250000, name = "withdraw"},
+						{icon = "fas fa-check", title = "Confirmer", value = "confirm"},
+						{icon = "fas fa-arrow-left", title = "Retour", value = "return"}
+					}
+					ESX.RefreshContext(elements)
+				elseif element.value == "confirm" then
+					local amount = tonumber(menu.eles[2].inputValue)
+					if amount == nil then
+						ESX.ShowNotification(TranslateCap('invalid_amount'))
+					else
+						TriggerServerEvent('esx_society:withdrawMoney3', society, amount)
+						ESX.CloseContext()
+					end
+				elseif element.value == "deposit_money" then
+					local elements = {
+						{unselectable = true, icon = "fas fa-wallet", title = TranslateCap('deposit_amount'), description = "Déposez de l'argent sur le compte de la société"},
+						{icon = "fas fa-wallet", title = "Montant", input = true, inputType = "number", inputPlaceholder = "Montant à déposer..", inputMin = 1, inputMax = 250000, name = "deposit"},
+						{icon = "fas fa-check", title = "Confirmer", value = "confirm2"},
+						{icon = "fas fa-arrow-left", title = "Retour", value = "return"}
+					}
+					ESX.RefreshContext(elements)
+				elseif element.value == "confirm2" then
+					local amount = tonumber(menu.eles[2].inputValue)
+					if amount == nil then
+						ESX.ShowNotification(TranslateCap('invalid_amount'))
+					else
+						TriggerServerEvent('esx_society:depositMoney3', society, amount)
+						ESX.CloseContext()
+					end
+				elseif element.value == "wash_money" then
+					local elements = {
+						{unselectable = true, icon = "fas fa-wallet", title = TranslateCap('wash_money_amount'), description = "Déposez de l'argent sale"},
+						{icon = "fas fa-wallet", title = "Montant", input = true, inputType = "number", inputPlaceholder = "Quantité à laver..", inputMin = 1, inputMax = 250000, name = "wash"},
+						{icon = "fas fa-check", title = "Confirmer", value = "confirm3"},
+						{icon = "fas fa-arrow-left", title = "Retour", value = "return"}
+					}
+					ESX.RefreshContext(elements)
+				elseif element.value == "confirm3" then
+					local amount = tonumber(menu.eles[2].inputValue)
+					if amount == nil then
+						ESX.ShowNotification(TranslateCap('invalid_amount'))
+					else
+						TriggerServerEvent('esx_society:washMoney3', society, amount)
+						ESX.CloseContext()
+					end
+				elseif element.value == "trois_manage_employees" then
+					OpenManageEmployeesMenu3(society, options)
+				elseif element.value == "manage_salary" then
+					OpenManageSalaryMenu3(society, options)
+				elseif element.value == "manage_grades" then
+					OpenManageGradesMenu3(society, options)
+				elseif element.value == "return" then
+					OpenBossMenu3(society, nil, options)
+				end
+			end)
+		end
+	end, society)
+end
+
 function OpenManageEmployeesMenu(society, options)
 	local elements = {
 		{unselectable = true, icon = "fas fa-users", title = TranslateCap('employee_management')},
@@ -379,6 +548,26 @@ function OpenManageEmployeesMenu2(society, options)
 			OpenRecruitMenu2(society, options)	
 		elseif element.value == "return" then
 			OpenBossMenu2(society, nil, options)
+		end
+	end)
+end
+
+function OpenManageEmployeesMenu3(society, options)
+	local elements = {
+		{unselectable = true, icon = "fas fa-users", title = TranslateCap('employee_management')},
+		{icon = "fas fa-users", title = TranslateCap('employee_list'), value = "employee_list"},
+		{icon = "fas fa-users", title = TranslateCap('recruit'), value = "recruit"}
+	}
+	
+	elements[#elements+1] = {icon = "fas fa-arrow-left", title = "Retour", value = "return"}
+	
+	ESX.OpenContext("right", elements, function(menu,element)
+		if element.value == "employee_list" then
+			OpenEmployeeList3(society, options)
+		elseif element.value == "recruit" then
+			OpenRecruitMenu3(society, options)	
+		elseif element.value == "return" then
+			OpenBossMenu3(society, nil, options)
 		end
 	end)
 end
@@ -471,6 +660,50 @@ function OpenEmployeeList2(society, options)
 	end, society)
 end
 
+function OpenEmployeeList3(society, options)
+	ESX.TriggerServerCallback('esx_society:getEmployees3', function(employees)
+		local elements = {
+			{unselectable = true, icon = "fas fa-user", title = "Employees"}
+		}
+
+		for i=1, #employees, 1 do
+			local gradeLabel = (employees[i].job3.grade_label == '' and employees[i].job3.label or employees[i].job3.grade_label)
+
+			elements[#elements+1] = {icon = "fas fa-user", title = employees[i].name .. " | " ..gradeLabel, gradeLabel = gradeLabel, data = employees[i]}
+		end
+
+		elements[#elements+1] = {icon = "fas fa-arrow-left", title = "Retour", value = "return"}
+
+		ESX.OpenContext("right", elements, function(menu,element) 
+			if element.value == "return" then
+				OpenManageEmployeesMenu3(society, options)
+			else
+				local elements2 = {
+					{unselectable = true, icon = "fas fa-user", title = element.title},
+					{icon = "fas fa-user", title = "Promouvoir", value = "promote"},
+					{icon = "fas fa-user", title = "Virer", value = "fire"},
+					{icon = "fas fa-arrow-left", title = "Retour", value = "return"}
+				}
+				ESX.OpenContext("right", elements2, function(menu2,element2)
+					local employee = element.data
+					if element2.value == "promote" then
+						ESX.CloseContext()
+						OpenPromoteMenu3(society, employee, options)
+					elseif element2.value == "fire" then
+						ESX.ShowNotification(TranslateCap('you_have_fired', employee.name))
+
+						ESX.TriggerServerCallback('esx_society:setJob3', function()
+							OpenEmployeeList3(society, options)
+						end, employee.identifier, 'unemployed3', 0, 'fire')
+					elseif element2.value == "return" then
+						OpenEmployeeList3(society, options)
+					end
+				end)
+			end
+		end)
+	end, society)
+end
+
 function OpenRecruitMenu(society, options)
 	ESX.TriggerServerCallback('esx_society:getOnlinePlayers', function(players)
 		local elements = {
@@ -546,6 +779,44 @@ function OpenRecruitMenu2(society, options)
 	end)
 end
 
+-- Triple Job
+function OpenRecruitMenu3(society, options)
+	ESX.TriggerServerCallback('esx_society:getOnlinePlayers3', function(players)
+		local elements = {
+			{unselectable = true, icon = "fas fa-user", title = TranslateCap('recruiting')}
+		}
+
+		for i=1, #players, 1 do
+			if players[i].job3.name ~= society then
+				elements[#elements+1] = {icon = "fas fa-user", title = players[i].name, value = players[i].source, name = players[i].name, identifier = players[i].identifier}
+			end
+		end
+
+		elements[#elements+1] = {icon = "fas fa-arrow-left", title = "Retour", value = "return"}
+
+		ESX.OpenContext("right", elements, function(menu,element)
+			if element.value == "return" then
+				OpenManageEmployeesMenu3(society, options)
+			else
+				local elements2 = {
+					{unselectable = true, icon = "fas fa-user", title = "Confirmer"},
+					{icon = "fas fa-times", title = TranslateCap('no'), value = "no"},
+					{icon = "fas fa-check", title = TranslateCap('yes'), value = "yes"},
+				}
+				ESX.OpenContext("right", elements2, function(menu2,element2)
+					if element2.value == "yes" then
+						ESX.ShowNotification(TranslateCap('you_have_hired', element.name))
+
+						ESX.TriggerServerCallback('esx_society:setJob3', function()
+							OpenRecruitMenu3(society, options)
+						end, element.identifier, society, 0, 'hire')
+					end
+				end)
+			end
+		end)
+	end)
+end
+
 function OpenPromoteMenu(society, employee, options)
 	ESX.TriggerServerCallback('esx_society:getJob', function(job)
 		if not job then
@@ -611,6 +882,41 @@ function OpenPromoteMenu2(society, employee, options)
 			end
 		end, function(menu)
 			OpenEmployeeList2(society, options)
+		end)
+	end, society)
+end
+
+-- Triple Job
+function OpenPromoteMenu3(society, employee, options)
+	ESX.TriggerServerCallback('esx_society:getJob3', function(job3)
+		if not job3 then
+			return
+		end
+
+		local elements = {
+			{unselectable = true, icon = "fas fa-user", title = TranslateCap('promote_employee', employee.name)}
+		}
+
+		for i=1, #job3.grades, 1 do
+			local gradeLabel = (job3.grades[i].label == '' and job3.label or job3.grades[i].label)
+
+			elements[#elements+1] = {icon = "fas fa-user", title = gradeLabel, value = job3.grades[i].grade, selected = (employee.job3.grade == job3.grades[i].grade)}
+		end
+
+		elements[#elements+1] = {icon = "fas fa-arrow-left", title = "Retour", value = "return"}
+
+		ESX.OpenContext("right", elements, function(menu,element)
+			if element.value == "return" then
+				OpenEmployeeList(society, options)
+			else
+				ESX.ShowNotification(TranslateCap('you_have_promoted', employee.name, element.title))
+
+				ESX.TriggerServerCallback('esx_society:setJob3', function()
+					OpenEmployeeList3(society, options)
+				end, employee.identifier, society, element.value, 'promote')
+			end
+		end, function(menu)
+			OpenEmployeeList3(society, options)
 		end)
 	end, society)
 end
@@ -720,6 +1026,59 @@ function OpenManageSalaryMenu2(society, options)
 	end, society)
 end
 
+-- Triple Job
+function OpenManageSalaryMenu3(society, options)
+	ESX.TriggerServerCallback('esx_society:getJob3', function(job3)
+		if not job3 then
+			return
+		end
+
+		local elements = {
+			{unselectable = true, icon = "fas fa-wallet", title = TranslateCap('salary_management')}
+		}
+
+		for i=1, #job3.grades, 1 do
+			local gradeLabel = (job3.grades[i].label == '' and job3.label or job3.grades[i].label)
+
+			elements[#elements+1] = {
+				icon = "fas fa-wallet",
+				title = ('%s - <span style="color:green;">%s</span>'):format(gradeLabel, TranslateCap('money_generic', ESX.Math.GroupDigits(job3.grades[i].salary))),
+				value = job3.grades[i].grade
+			}
+		end
+			
+		elements[#elements+1] = {icon = "fas fa-arrow-left", title = "Retour", value = "return"}
+
+		ESX.OpenContext("right", elements, function(menu,element)
+			local elements = {
+				{unselectable = true, icon = "fas fa-wallet", title = element.title, description = "Modifier le salaire", value = element.value},
+				{icon = "fas fa-wallet", title = "Montant", input = true, inputType = "number", inputPlaceholder = "Nouveau salaire..", inputMin = 1, inputMax = Config.MaxSalary, name = "gradesalary"},
+				{icon = "fas fa-check", title = "Confirmer", value = "confirm"}
+			}
+
+			ESX.RefreshContext(elements)
+			if element.value == "confirm" then
+				local amount = tonumber(menu.eles[2].inputValue)
+
+				if amount == nil then
+					ESX.ShowNotification(TranslateCap('invalid_value_nochanges'))
+					OpenManageSalaryMenu3(society, options)
+				elseif amount > Config.MaxSalary then
+					ESX.ShowNotification(TranslateCap('invalid_amount_max'))
+					OpenManageSalaryMenu3(society, options)
+				else
+					ESX.CloseContext()
+					ESX.TriggerServerCallback('esx_society:setJobSalary3', function()
+						OpenManageSalaryMenu3(society, options)
+					end, society, menu.eles[1].value, amount)
+				end
+			elseif element.value == "return" then
+				OpenBossMenu3(society, nil, options)
+			end
+		end)
+	end, society)
+end
+
 function OpenManageGradesMenu(society, options)
 	ESX.TriggerServerCallback('esx_society:getJob', function(job)
 		if not job then
@@ -809,12 +1168,61 @@ function OpenManageGradesMenu2(society, options)
 	end, society)
 end
 
+-- Triple Job
+function OpenManageGradesMenu3(society, options)
+	ESX.TriggerServerCallback('esx_society:getJob3', function(job3)
+		if not job3 then
+			return
+		end
+
+		local elements = {
+			{unselectable = true, icon = "fas fa-wallet", title = TranslateCap('grade_management')}
+		}
+
+		for i=1, #job3.grades, 1 do
+			local gradeLabel = (job3.grades[i].label == '' and job3.label or job3.grades[i].label)
+
+			elements[#elements+1] = {icon = "fas fa-wallet", title = ('%s'):format(gradeLabel), value = job3.grades[i].grade}
+		end
+			
+		elements[#elements+1] = {icon = "fas fa-arrow-left", title = "Retour", value = "return"}
+
+		ESX.OpenContext("right", elements, function(menu,element)
+			local elements = {
+				{unselectable = true, icon = "fas fa-wallet", title = element.title, description = "Changer le nom du grade", value = element.value},
+				{icon = "fas fa-wallet", title = "Label", input = true, inputType = "text", inputPlaceholder = "Changer le nom du grade..", name = "gradelabel"},
+				{icon = "fas fa-check", title = "Confirmer", value = "confirm"}
+			}
+
+			ESX.RefreshContext(elements)
+			if element.value == "confirm" then
+				if menu.eles[2].inputValue then
+					local label = tostring(menu.eles[2].inputValue)
+
+					ESX.TriggerServerCallback('esx_society:setJobLabel3', function()
+					OpenManageGradesMenu3(society, options)
+				end, society, menu.eles[1].value, label)
+				else
+					ESX.ShowNotification(TranslateCap('invalid_value_nochanges'))
+					OpenManageGradesMenu3(society, options)
+				end
+			elseif element.value == "return" then
+				OpenBossMenu3(society, nil, options)
+			end
+		end)
+	end, society)
+end
+
 AddEventHandler('esx_society:openBossMenu', function(society, close, options)
 	OpenBossMenu(society, close, options)
 end)
 
 AddEventHandler('esx_society:openBossMenu2', function(society, close, options)
 	OpenBossMenu2(society, close, options)
+end)
+
+AddEventHandler('esx_society:openBossMenu3', function(society, close, options)
+	OpenBossMenu3(society, close, options)
 end)
 
 if ESX.PlayerLoaded then RefreshBussHUD() end

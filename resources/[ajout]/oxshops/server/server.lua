@@ -1,6 +1,3 @@
------------------For support, scripts, and more----------------
---------------- https://discord.gg/wasabiscripts  -------------
----------------------------------------------------------------
 ESX = exports['es_extended']:getSharedObject()
 local swapHook, buyHook
 
@@ -42,9 +39,9 @@ CreateThread(function()
 	swapHook = exports.ox_inventory:registerHook('swapItems', function(payload)
 		for k,v in pairs(Config.Shops) do
 			if payload.fromInventory == k then
-				TriggerEvent('wasabi_oxshops:refreshShop', k)
+				TriggerEvent('oxshops:refreshShop', k)
 			elseif payload.toInventory == k and tonumber(payload.fromInventory) ~= nil then
-				TriggerClientEvent('wasabi_oxshops:setProductPrice', payload.fromInventory, k, payload.toSlot)
+				TriggerClientEvent('oxshops:setProductPrice', payload.fromInventory, k, payload.toSlot)
 			end
 		end
 	end, {})
@@ -62,7 +59,7 @@ CreateThread(function()
 	 end, {})
 end)
 
-RegisterNetEvent('wasabi_oxshops:refreshShop', function(shop)
+RegisterNetEvent('oxshops:refreshShop', function(shop)
 	Wait(250)
 	local items = exports.ox_inventory:GetInventoryItems(shop, false)
 	local stashItems = {}
@@ -83,7 +80,7 @@ RegisterNetEvent('wasabi_oxshops:refreshShop', function(shop)
 	})
 end)
 
-RegisterNetEvent('wasabi_oxshops:setData', function(shop, slot, price)
+RegisterNetEvent('oxshops:setData', function(shop, slot, price)
 	local item = exports.ox_inventory:GetSlot(shop, slot)
 	if not item then return end
 	local metadata = item.metadata
@@ -92,5 +89,5 @@ RegisterNetEvent('wasabi_oxshops:setData', function(shop, slot, price)
 		price = price
 	}
 	exports.ox_inventory:SetMetadata(shop, slot, metadata)
-	TriggerEvent('wasabi_oxshops:refreshShop', shop)
+	TriggerEvent('oxshops:refreshShop', shop)
 end)

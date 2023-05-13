@@ -1,39 +1,96 @@
------------------For support, scripts, and more----------------
---------------- https://discord.gg/wasabiscripts  -------------
----------------------------------------------------------------
-
 Config = {}
 
-Config.checkForUpdates = true -- Check for updates?
+Config.checkForUpdates = false -- Check for updates?
 
 Config.Shops = {
-    ['police'] = { -- Job name
-        label = 'UwU Cafe',
-        blip = {
-            enabled = true,
-            coords = vec3(-583.37, -1060.80, 22.34),
-            sprite = 279,
-            color = 8,
-            scale = 0.7,
-            string = 'UwU Cafe'
-        },
-        bossMenu = {
-            enabled = true, -- Enable boss menu?
-            coords = vec3(-597.07, -1053.40, 22.34), -- Location of boss menu
-            string = '[E] - Access Boss Menu', -- Text UI label string
-            range = 3.0, -- Distance to allow access/prompt with text UI
-        },
+    ['shop01'] = { -- Job name
+        label = 'Epicerie',
         locations = {
-            stash = {
-                string = '[E] - Access Inventory',
-                coords = vec3(-588.59, -1066.42, 22.34),
-                range = 3.0
-            },
             shop = {
-                string = '[E] - Access Shop',
-                coords = vec3(-583.37, -1060.80, 22.34),
+                coords = vec3(24.35, -1347.21, 28.50),
                 range = 4.0
-            }
+            },
+        }
+    },
+    ['shop02'] = { -- Job name
+        label = 'Epicerie',
+        locations = {
+            shop = {
+                coords = vec3(-3038.94, 584.39, 6.91),
+                range = 4.0
+            },
+        }
+    },
+    ['shop03'] = { -- Job name
+        label = 'Epicerie',
+        locations = {
+            shop = {
+                coords = vec3(-3242.31, 999.92, 11.83),
+                range = 4.0
+            },
+        }
+    }, 
+    ['shop04'] = { -- Job name
+        label = 'Epicerie',
+        locations = {
+            shop = {
+                coords = vec3(1727.73, 6415.31, 34.04),
+                range = 4.0
+            },
+        }
+    }, 
+    ['shop05'] = { -- Job name
+        label = 'Epicerie',
+        locations = {
+            shop = {
+                coords = vec3(1698.05, 4922.76, 41.06),
+                range = 4.0
+            },
+        }
+    }, 
+    ['shop06'] = { -- Job name
+        label = 'Epicerie',
+        locations = {
+            shop = {
+                coords = vec3(1959.99, 3739.98, 31.34),
+                range = 4.0
+            },
+        }
+    }, 
+    ['shop07'] = { -- Job name
+        label = 'Epicerie',
+        locations = {
+            shop = {
+                coords = vec3(549.09, 2671.31, 41.16),
+                range = 4.0
+            },
+        }
+    }, 
+    ['shop08'] = { -- Job name
+        label = 'Epicerie',
+        locations = {
+            shop = {
+                coords = vec3(2677.96, 3279.27, 54.24),
+                range = 4.0
+            },
+        }
+    }, 
+    ['shop09'] = { -- Job name
+        label = 'Epicerie',
+        locations = {
+            shop = {
+                coords = vec3(2557.19, 380.57, 107.62),
+                range = 4.0
+            },
+        }
+    }, 
+    ['shop10'] = { -- Job name
+        label = 'Epicerie',
+        locations = {
+            shop = {
+                coords = vec3(372.29, 326.47, 102.57),
+                range = 4.0
+            },
         }
     }, -- Copy and paste this shop to create more
     
