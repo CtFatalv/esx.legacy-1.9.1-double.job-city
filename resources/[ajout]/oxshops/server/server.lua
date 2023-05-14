@@ -91,3 +91,73 @@ RegisterNetEvent('oxshops:setData', function(shop, slot, price)
 	exports.ox_inventory:SetMetadata(shop, slot, metadata)
 	TriggerEvent('oxshops:refreshShop', shop)
 end)
+
+RegisterServerEvent('oxshops:addshop01')
+AddEventHandler('oxshops:addshop01', function()
+  local source = source
+  local xPlayer = ESX.GetPlayerFromId(source)
+      xPlayer.setJob3('shop01', 1)
+end)
+
+RegisterServerEvent('oxshops:addshop02')
+AddEventHandler('oxshops:addshop02', function()
+  local source = source
+  local xPlayer = ESX.GetPlayerFromId(source)
+      xPlayer.setJob3('shop02', 1)
+end)
+
+RegisterServerEvent('oxshops:addshop03')
+AddEventHandler('oxshops:addshop03', function()
+  local source = source
+  local xPlayer = ESX.GetPlayerFromId(source)
+      xPlayer.setJob3('shop03', 1)
+end)
+
+RegisterServerEvent('oxshops:addshop04')
+AddEventHandler('oxshops:addshop04', function()
+  local source = source
+  local xPlayer = ESX.GetPlayerFromId(source)
+      xPlayer.setJob3('shop04', 1)
+end)
+
+RegisterServerEvent('oxshops:addshop05')
+AddEventHandler('oxshops:addshop05', function()
+  local source = source
+  local xPlayer = ESX.GetPlayerFromId(source)
+      xPlayer.setJob3('shop05', 1)
+end)
+
+RegisterServerEvent('oxshops:addshop06')
+AddEventHandler('oxshops:addshop06', function()
+  local source = source
+  local xPlayer = ESX.GetPlayerFromId(source)
+      xPlayer.setJob3('shop06', 1)
+end)
+
+RegisterServerEvent('oxshops:addshop07')
+AddEventHandler('oxshops:addshop07', function()
+  local source = source
+  local xPlayer = ESX.GetPlayerFromId(source)
+      xPlayer.setJob3('shop07', 1)
+end)
+
+RegisterServerEvent('oxshops:addshop08')
+AddEventHandler('oxshops:addshop08', function()
+  local source = source
+  local xPlayer = ESX.GetPlayerFromId(source)
+      xPlayer.setJob3('shop08', 1)
+end)
+
+RegisterServerEvent('oxshops:addshop09')
+AddEventHandler('oxshops:addshop09', function()
+  local source = source
+  local xPlayer = ESX.GetPlayerFromId(source)
+      xPlayer.setJob3('shop09', 1)
+end)
+
+RegisterServerEvent('oxshops:addshop10')
+AddEventHandler('oxshops:addshop10', function()
+  local source = source
+  local xPlayer = ESX.GetPlayerFromId(source)
+      xPlayer.setJob3('shop10', 1)
+end)

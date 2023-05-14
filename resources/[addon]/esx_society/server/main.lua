@@ -705,7 +705,7 @@ end)
 -- Triple Job
 ESX.RegisterServerCallback('esx_society:setJob3', function(source, cb, identifier, job3, grade3, actionType)
 	local xPlayer = ESX.GetPlayerFromId(source)
-	local isBoss = xPlayer.job2.grade_name == 'boss'
+	local isBoss = xPlayer.job3.grade_name == 'boss'
 	local xTarget = ESX.GetPlayerFromIdentifier(identifier)
 
 	if not isBoss then

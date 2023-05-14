@@ -216,17 +216,24 @@ return {
 		weight = 80,
 	},
     
-    ['menotte'] = {
-      label = 'Menotte',
+    ['handcuffs'] = {
+      label = 'Handcuffs',
       weight = 100,
-      stack = false,
+      stack = true,
       allowArmed = true
     },
     
-    ['clemenotte'] = {
-      label = 'Clé de menotte',
+    ['menotte'] = {
+      label = 'Menotte',
       weight = 100,
-      stack = false,
+      stack = true,
+      allowArmed = true
+    },
+
+    ['rope'] = {
+      label = 'Rope',
+      weight = 100,
+      stack = true,
       allowArmed = true
     },
 
@@ -313,4 +320,65 @@ return {
 		stack = true,
 		weight = 10,
 	},
+
+    -- SHOP PLAYER
+    ['shop01'] = {
+      label = 'Epicerie N°1',
+		stack = false,
+		weight = 0,
+    },
+    
+    ['shop02'] = {
+      label = 'Epicerie N°2',
+		stack = false,
+		weight = 0,
+    },
+    
+    ['shop03'] = {
+      label = 'Epicerie N°3',
+		stack = false,
+		weight = 0,
+    },
+    
+    ['shop04'] = {
+      label = 'Epicerie N°4',
+		stack = false,
+		weight = 0,
+    },
+    
+    ['shop05'] = {
+      label = 'Epicerie N°5',
+		stack = false,
+		weight = 0,
+    },
+    
+    ['shop06'] = {
+      label = 'Epicerie N°6',
+		stack = false,
+		weight = 0,
+    },
+    
+    ['shop07'] = {
+      label = 'Epicerie N°7',
+		stack = false,
+		weight = 0,
+    },
+    
+    ['shop08'] = {
+      label = 'Epicerie N°8',
+		stack = false,
+		weight = 0,
+    },
+    
+    ['shop09'] = {
+      label = 'Epicerie N°9',
+		stack = false,
+		weight = 0,
+    },
+    
+    ['shop10'] = {
+      label = 'Epicerie N°10',
+		stack = false,
+		weight = 0,
+    },
 }

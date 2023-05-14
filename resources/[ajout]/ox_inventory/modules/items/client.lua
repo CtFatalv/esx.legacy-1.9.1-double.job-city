@@ -1,3 +1,5 @@
+ESX = exports["es_extended"]:getSharedObject()
+
 if not lib then return end
 
 local Items = require 'modules.items.shared' --[[@as table<string, OxClientItem>]]
@@ -49,6 +51,96 @@ local ox_inventory = exports[shared.resource]
 -----------------------------------------------------------------------------------------------
 -- Clientside item use functions
 -----------------------------------------------------------------------------------------------
+
+Item('shop01', function(data, slot)
+	ox_inventory:useItem(data, function(data)
+		if data then   
+			TriggerServerEvent('oxshops:addshop01')
+            ESX.ShowNotification("Vous êtes maintenat propriétaire du shop N°1", "info", 3000)        
+        end
+	end)
+end)
+
+Item('shop02', function(data, slot)
+	ox_inventory:useItem(data, function(data)
+		if data then   
+			TriggerServerEvent('oxshops:addshop02')
+            ESX.ShowNotification("Vous êtes maintenat propriétaire du shop N°2", "info", 3000)        
+        end
+	end)
+end)
+
+Item('shop03', function(data, slot)
+	ox_inventory:useItem(data, function(data)
+		if data then   
+			TriggerServerEvent('oxshops:addshop03')
+            ESX.ShowNotification("Vous êtes maintenat propriétaire du shop N°3", "info", 3000)        
+        end
+	end)
+end)
+
+Item('shop04', function(data, slot)
+	ox_inventory:useItem(data, function(data)
+		if data then   
+			TriggerServerEvent('oxshops:addshop04')
+            ESX.ShowNotification("Vous êtes maintenat propriétaire du shop N°4", "info", 3000)        
+        end
+	end)
+end)
+
+Item('shop05', function(data, slot)
+	ox_inventory:useItem(data, function(data)
+		if data then   
+			TriggerServerEvent('oxshops:addshop05')
+            ESX.ShowNotification("Vous êtes maintenat propriétaire du shop N°5", "info", 3000)        
+        end
+	end)
+end)
+
+Item('shop06', function(data, slot)
+	ox_inventory:useItem(data, function(data)
+		if data then   
+			TriggerServerEvent('oxshops:addshop06')
+            ESX.ShowNotification("Vous êtes maintenat propriétaire du shop N°6", "info", 3000)        
+        end
+	end)
+end)
+
+Item('shop07', function(data, slot)
+	ox_inventory:useItem(data, function(data)
+		if data then   
+			TriggerServerEvent('oxshops:addshop07')
+            ESX.ShowNotification("Vous êtes maintenat propriétaire du shop N°7", "info", 3000)        
+        end
+	end)
+end)
+
+Item('shop08', function(data, slot)
+	ox_inventory:useItem(data, function(data)
+		if data then   
+			TriggerServerEvent('oxshops:addshop08')
+            ESX.ShowNotification("Vous êtes maintenat propriétaire du shop N°8", "info", 3000)        
+        end
+	end)
+end)
+
+Item('shop09', function(data, slot)
+	ox_inventory:useItem(data, function(data)
+		if data then   
+			TriggerServerEvent('oxshops:addshop09')
+            ESX.ShowNotification("Vous êtes maintenat propriétaire du shop N°9", "info", 3000)        
+        end
+	end)
+end)
+
+Item('shop10', function(data, slot)
+	ox_inventory:useItem(data, function(data)
+		if data then   
+			TriggerServerEvent('oxshops:addshop10')
+            ESX.ShowNotification("Vous êtes maintenat propriétaire du shop N°10", "info", 3000)        
+        end
+	end)
+end)
 
 Item('bandage', function(data, slot)
 	local maxHealth = GetEntityMaxHealth(cache.ped)
