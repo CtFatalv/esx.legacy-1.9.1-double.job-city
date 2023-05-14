@@ -599,7 +599,7 @@ CREATE TABLE `users` (
   `identifier` varchar(46) NOT NULL,
   `accounts` longtext DEFAULT NULL,
   `group` varchar(50) DEFAULT 'user',
-  `inventory` longtext DEFAULT '[{"count":1,"slot":1,"name":"phone"},{"count":10,"slot":2,"name":"burger"},{"count":10,"slot":3,"name":"water"},{"count":5000,"slot":4,"name":"money"}]',
+  `inventory` longtext DEFAULT '[{"count":1,"slot":1,"name":"phone"},{"count":10,"slot":2,"name":"burger"},{"count":10,"slot":3,"name":"water"},{"count":500,"slot":4,"name":"money"}]',
   `job` varchar(20) DEFAULT 'unemployed',
   `job_grade` int(11) DEFAULT 0,
   `job2` varchar(20) DEFAULT 'unemployed2',
