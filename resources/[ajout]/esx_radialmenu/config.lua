@@ -457,6 +457,14 @@ Config.MenuItems = {
                 type = 'client',
                 event = 'Alf-Carkeys:OpenKeysMenu',
                 shouldClose = true
+            },
+            {
+                id = 'vehiclesend',
+                title = 'Vendre/donner véhicule',
+                icon = 'car',
+                type = 'client',
+                event = 'esx_givecarkeys:keys',
+                shouldClose = true
             }
         }
     },
