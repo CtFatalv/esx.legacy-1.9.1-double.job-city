@@ -53,7 +53,7 @@ CreateThread(function()
 			 local count = payload.count
 			 exports.ox_inventory:RemoveItem(metadata.shopData.shop, payload.itemName, payload.count)
 			 TriggerEvent('esx_addonaccount:getSharedAccount', 'society_'..metadata.shopData.shop, function(account)
-				 account.addMoney(price)
+			 account.addMoney(price*count)
 			 end)
 		 end
 	 end, {})
