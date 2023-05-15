@@ -460,10 +460,18 @@ Config.MenuItems = {
             },
             {
                 id = 'vehiclesend',
-                title = 'Vendre/donner véhicule',
+                title = 'Donner véhicule',
                 icon = 'car',
                 type = 'client',
                 event = 'esx_givecarkeys:keys',
+                shouldClose = true
+            },
+            {
+                id = 'vehicleancre',
+                title = 'Ancré le Bateau',
+                icon = 'anchor',
+                type = 'client',
+                event = 'Alf:ancre',
                 shouldClose = true
             }
         }

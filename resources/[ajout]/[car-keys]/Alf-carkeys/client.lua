@@ -787,26 +787,6 @@ Citizen.CreateThread(function ()
     end
   end)
 
-
-Citizen.CreateThread(function ()
-    while true do
-        Citizen.Wait(10)
-        if IsControlJustReleased(0, Config.VehicleMenu) then    
-            local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-            local player = PlayerPedId()
-            if IsPedInAnyVehicle(player, false) and not IsPedInAnyBoat(PlayerPedId()) then
-                if getPedSeat(player, vehicle) == -1 then
-                    VehicleDriverControls()
-                else
-                    VehiclePassengerControls()
-                end
-            elseif IsPedInAnyBoat(PlayerPedId()) and getPedSeat(player, vehicle) == -1 then
-                BoatControls()
-            end
-        end
-    end       
-end)
-
 Citizen.CreateThread(function ()
     while true do
         Citizen.Wait(1)
@@ -1160,3 +1140,23 @@ if Config.CreateKeyCommand then
         end, localVehPlate)
     end, false)
 end
+
+AddEventHandler('Alf:ancre', function()
+    local ped = GetPlayerPed(-1)
+    local boat  = GetVehiclePedIsIn(ped, true)   
+    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+    local player = PlayerPedId()
+    if IsPedInAnyBoat(PlayerPedId()) and getPedSeat(player, vehicle) == -1 then
+        if anchor == false then
+            SetBoatAnchor(boat, true)
+			ESX.ShowNotification("~g~ancré", "info", 3000)
+            anchor = true
+        elseif anchor == true then
+            SetBoatAnchor(boat, false)
+			ESX.ShowNotification("~r~n'est plus ancré", "info", 3000)
+            anchor = false
+        end
+    else
+		ESX.ShowNotification("Vous ne piloter pas de ~r~Bâteau~s~!", "error", 3000)
+    end
+end)-- Target Boss Action
