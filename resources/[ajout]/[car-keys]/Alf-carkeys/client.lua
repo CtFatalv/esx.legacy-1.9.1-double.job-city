@@ -520,7 +520,7 @@ end)
         end
     end
 end)]]
-
+--[[
 function DoorLock()
         local dict = "anim@mp_player_intmenu@key_fob@"
         
@@ -644,7 +644,7 @@ function DoorLock()
         end, localVehPlate, xPlayer.job.name)
     end
 end
-
+]]
 --[[RegisterNetEvent('Alf-Carkeys:ToggleEngine')
 AddEventHandler('Alf-Carkeys:ToggleEngine', function()
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
@@ -875,7 +875,7 @@ function getPedSeat(p, v)
 	end
 	return -2
 end
-
+--[[
 function VehicleDriverControls()
     ESX.UI.Menu.CloseAll()
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
@@ -1085,7 +1085,7 @@ function VehiclePassengerControls()
         menu.close()
     end)
 end
-
+]]
 
 local anchor = false
 local boat = nil
@@ -1127,7 +1127,7 @@ function BoatControls()
         menu.close()
     end)
 end
-
+--[[
 if Config.CreateKeyCommand then 
     RegisterCommand("createkey", function()
         local localVehId = GetVehiclePedIsIn(GetPlayerPed(-1), false)
@@ -1140,7 +1140,7 @@ if Config.CreateKeyCommand then
         end, localVehPlate)
     end, false)
 end
-
+]]
 AddEventHandler('Alf:ancre', function()
     local ped = GetPlayerPed(-1)
     local boat  = GetVehiclePedIsIn(ped, true)   

@@ -2,7 +2,7 @@
 local hurt = false
 Citizen.CreateThread(function()
     while true do
-        Wait(10000)
+        Wait(500)
         if GetEntityHealth(GetPlayerPed(-1)) <= 150 then
             setHurt()
         elseif hurt and GetEntityHealth(GetPlayerPed(-1)) > 150 then

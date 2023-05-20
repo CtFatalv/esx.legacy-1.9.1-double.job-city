@@ -85,7 +85,7 @@ AddEventHandler("rxwMenuAdmin:heal", function(id)
     local _src = id
     local xPlayer = ESX.GetPlayerFromId(_src)
     TriggerClientEvent("esx_basicneeds:healPlayer", _src)
-    xPlayer.showNotification("Vous avez été ~g~heal~s~ !")
+    xPlayer.showNotification("Vous avez été ~g~soigné~s~ !")
 end)
 
 RegisterNetEvent("rxwMenuAdmin:revive")
@@ -93,7 +93,7 @@ AddEventHandler("rxwMenuAdmin:revive", function(id)
     local _src = id
     local xPlayer = ESX.GetPlayerFromId(_src)
     TriggerClientEvent("esx_ambulancejob:revive", _src)
-    xPlayer.showNotification("Vous avez été ~g~revive~s~ !")
+    xPlayer.showNotification("Vous avez été ~g~réanimé~s~ !")
 end)
 
 RegisterNetEvent("rxwMenuAdmin:sendMsg")
@@ -136,7 +136,7 @@ AddEventHandler("rxwMenuAdmin:warnPlayer", function(id, reason)
     else
         allWarn[_src] = 1
     end
-    TriggerClientEvent("esx:showNotification", _src, "Vous avez était warn pour "..reason)
+    TriggerClientEvent("esx:showNotification", _src, "Vous avez était averti pour "..reason)
     if allWarn[_src] == 3 then
         DropPlayer(_src, "[rWarn] - Vous avez été kick après avoir reçu 3 warn...")
     end

@@ -182,7 +182,7 @@ function Buy(result,xPlayer,model, props, payment, job, type, garage, notregiste
                 ['@plate']   = props.plate:upper(),
                 ['@props'] = data,
                 ['@job'] = job,
-                ['@'..stored..''] = 1,
+                ['@'..stored..''] = 0,
                 ['@'..garage_id..''] = garage,
                 ['@'..type_..''] = type
             }
@@ -192,7 +192,7 @@ function Buy(result,xPlayer,model, props, payment, job, type, garage, notregiste
                     ['@'..owner..'']   = xPlayer.identifier,
                     ['@plate']   = props.plate:upper(),
                     ['@props'] = data,
-                    ['@'..stored..''] = 1,
+                    ['@'..stored..''] = 0,
                     ['@job'] = job,
                     ['@'..garage_id..''] = 'pillboxgarage',
                     ['@vehicle'] = model,

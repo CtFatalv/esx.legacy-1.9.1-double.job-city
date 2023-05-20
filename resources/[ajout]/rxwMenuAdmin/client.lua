@@ -270,16 +270,16 @@ function menuAdmin()
                     end
                 end)
 
-                RageUI.ButtonWithStyle("Heal", nil, {RightLabel = "→"},true, function(Hovered, Active, Selected)
+                RageUI.ButtonWithStyle("Soin/Nourriture", nil, {RightLabel = "→"},true, function(Hovered, Active, Selected)
                     if Selected then
-                        ESX.ShowNotification("~g~Heal en cours....")
+                        ESX.ShowNotification("~g~Soin en cours....")
                         TriggerServerEvent("rxwMenuAdmin:heal", GetPlayerServerId(PlayerId()))
                     end
                 end)
 
-                RageUI.ButtonWithStyle("Revive", nil, {RightLabel = "→"},true, function(Hovered, Active, Selected)
+                RageUI.ButtonWithStyle("Réanimer", nil, {RightLabel = "→"},true, function(Hovered, Active, Selected)
                     if Selected then
-                        ESX.ShowNotification("~g~Revive en cours....")
+                        ESX.ShowNotification("~g~Réanimation en cours....")
                         TriggerServerEvent("rxwMenuAdmin:revive", GetPlayerServerId(PlayerId()))
                     end
                 end)
@@ -389,9 +389,9 @@ function menuAdmin()
                     end
                 end)
 
-                RageUI.ButtonWithStyle("Heal", nil, {RightLabel = "→"},true, function(Hovered, Active, Selected)
+                RageUI.ButtonWithStyle("Soin/Nourriture", nil, {RightLabel = "→"},true, function(Hovered, Active, Selected)
                     if Selected then
-                        ESX.ShowNotification("~g~Heal en cours ("..GetPlayerName(GetPlayerFromServerId(IdSelected))..")")
+                        ESX.ShowNotification("~g~Soin en cours ("..GetPlayerName(GetPlayerFromServerId(IdSelected))..")")
                         TriggerServerEvent("rxwMenuAdmin:heal", IdSelected)
                     end
                 end)
@@ -515,21 +515,21 @@ function menuAdmin()
                 end
             end)
 
-            RageUI.ButtonWithStyle("Kill", nil, {RightLabel = "→"},true, function(Hovered, Active, Selected)
+            RageUI.ButtonWithStyle("tuer", nil, {RightLabel = "→"},true, function(Hovered, Active, Selected)
                 if Selected then
                     TriggerServerEvent("rxwMenuAdmin:killPlayer", IdSelected)
                 end
             end)
-
+--[[
             RageUI.ButtonWithStyle("Wipe", nil, {RightLabel = "→"},true, function(Hovered, Active, Selected)
                 if Selected then
                     TriggerServerEvent("rxwMenuAdmin:wipePlayer", IdSelected)
                 end
             end)
-
-            RageUI.ButtonWithStyle("Warn", nil, {RightLabel = "→"},true, function(Hovered, Active, Selected)
+]]
+            RageUI.ButtonWithStyle("Avertissement", nil, {RightLabel = "→"},true, function(Hovered, Active, Selected)
                 if Selected then
-                    local raison = rxwMenuAdminKeyboard("Raison du Warn ?", "", 20)
+                    local raison = rxwMenuAdminKeyboard("Raison de l'Avertissement ?", "", 20)
                     if raison then
                         TriggerServerEvent("rxwMenuAdmin:warnPlayer", IdSelected, raison)
                     else
@@ -582,7 +582,7 @@ function menuAdmin()
                     end
                 end)
 
-                RageUI.ButtonWithStyle("Delete all peds", nil, {RightLabel = "→"},true, function(Hovered, Active, Selected)
+                RageUI.ButtonWithStyle("Activer/Desactiver les PNJ", nil, {RightLabel = "→"},true, function(Hovered, Active, Selected)
                     if Selected then
                         if deleteAllPeds then
                             deleteAllPeds = false
@@ -598,8 +598,7 @@ function menuAdmin()
 
                 RageUI.ButtonWithStyle("Soleil", "Rend le ciel ensoleillé", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
                     if Selected then
-                        ExecuteCommand('setTime 10 00')
-                        ExecuteCommand('setWeather extrasunny')
+                        ExecuteCommand('weather extrasunny')
                         TriggerServerEvent("rxwMenuAdmin:Soleil", "Les prévision annonce un temps ~y~Ensoleillé")
                         cooldown = true
                         Citizen.SetTimeout(10000, function()
@@ -610,7 +609,7 @@ function menuAdmin()
 
                 RageUI.ButtonWithStyle("Nuageux", "Rend le ciel nuageux", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
                     if Selected then
-                        ExecuteCommand('setWeather overcast')
+                        ExecuteCommand('weather overcast')
                         TriggerServerEvent("rxwMenuAdmin:Soleil", "Les prévision annonce un temps ~c~Nuageux")
                         cooldown = true
                         Citizen.SetTimeout(10000, function()
@@ -621,7 +620,7 @@ function menuAdmin()
 
                 RageUI.ButtonWithStyle("Pluie", "Rend le ciel pluvieux", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
                     if Selected then
-                        ExecuteCommand('setWeather rain')
+                        ExecuteCommand('weather rain')
                         TriggerServerEvent("rxwMenuAdmin:Soleil", "Les prévision annonce de la ~b~Pluie")
                         cooldown = true
                         Citizen.SetTimeout(10000, function()
@@ -632,7 +631,7 @@ function menuAdmin()
 
                 RageUI.ButtonWithStyle("Orage", "Rend le ciel orageux", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
                     if Selected then
-                        ExecuteCommand('setWeather thunder')
+                        ExecuteCommand('weather thunder')
                         TriggerServerEvent("orage", "Les prévision annonce une tempête ~r~d'orage")
                         cooldown = true
                         Citizen.SetTimeout(10000, function()
@@ -643,7 +642,7 @@ function menuAdmin()
                 
                 RageUI.ButtonWithStyle("Neige", "Rend le ciel en tempête de neige", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
                     if Selected then
-                        ExecuteCommand('setWeather blizzard')
+                        ExecuteCommand('weather blizzard')
                         TriggerServerEvent("orage", "Les prévision annonce une tempête de ~r~ Neige")
                         cooldown = true
                         Citizen.SetTimeout(10000, function()
@@ -651,10 +650,10 @@ function menuAdmin()
                         end)
                     end
                 end)
-				RageUI.ButtonWithStyle("Stopper", "Stopper le changement du ciel", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
+				RageUI.ButtonWithStyle("Freeze le temps en soleil", "Bloquer le temps sur soleil", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
                     if Selected then
-                        ExecuteCommand('freezeWeather true')
-                        TriggerServerEvent("rxwMenuAdmin:Soleil", "Met en arrêt ~r~le temps")
+                        ExecuteCommand('weather extrasunny 0 1')
+                        TriggerServerEvent("rxwMenuAdmin:Soleil", "Bloquer le temps sur ~r~soleil")
                         cooldown = true
                         Citizen.SetTimeout(10000, function()
                             cooldown = false
@@ -662,10 +661,10 @@ function menuAdmin()
                     end
                 end)
                 
-                RageUI.ButtonWithStyle("Remettre", "Remettre changement du ciel", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
+                RageUI.ButtonWithStyle("Defreeze le temps", "Defreeze le temps", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
                     if Selected then
-                        ExecuteCommand('freezeWeather false')
-                        TriggerServerEvent("rxwMenuAdmin:Soleil", "Met en fonction ~r~le temps")
+                        ExecuteCommand('weather extrasunny 0 0')
+                        TriggerServerEvent("rxwMenuAdmin:Soleil", "Defreeze le temps")
                         cooldown = true
                         Citizen.SetTimeout(10000, function()
                             cooldown = false
@@ -678,7 +677,7 @@ function menuAdmin()
                 
                 RageUI.ButtonWithStyle("Midi", "Avancer l'heure à 12h00", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
                     if Selected then
-                        ExecuteCommand('setTime 12 00')
+                        ExecuteCommand('time 00 12 00 3000 0')
                         TriggerServerEvent("rxwMenuAdmin:Soleil", "L'horloge est avancé à ~c~midi")
                         cooldown = true
                         Citizen.SetTimeout(10000, function()
@@ -688,7 +687,7 @@ function menuAdmin()
                 end)
                 RageUI.ButtonWithStyle("Minuit", "Avancer l'heure à 00h00", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
                     if Selected then
-                        ExecuteCommand('setTime 00 00')
+                        ExecuteCommand('time 00 00 00 3000 0')
                         TriggerServerEvent("rxwMenuAdmin:Soleil", "L'horloge est avancé à ~r~minuit")
                         cooldown = true
                         Citizen.SetTimeout(10000, function()
@@ -696,20 +695,10 @@ function menuAdmin()
                         end)
                     end
                 end)
-                RageUI.ButtonWithStyle("Stopper", "Stopper l'horloge", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
+                RageUI.ButtonWithStyle("Desactiver/Activer l'horloge", "Desactiver/Activer l'horloge", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
                     if Selected then
-                        ExecuteCommand('freezeTime true')
-                        TriggerServerEvent("rxwMenuAdmin:Soleil", "Met en arrêt ~r~l'horloge")
-                        cooldown = true
-                        Citizen.SetTimeout(10000, function()
-                            cooldown = false
-                        end)
-                    end
-                end)
-                RageUI.ButtonWithStyle("Remettre", "Remettre l'horloge", { RightLabel = "→→" }, not cooldown, function(Hovered, Active, Selected)
-                    if Selected then
-                        ExecuteCommand('freezeTime false')
-                        TriggerServerEvent("rxwMenuAdmin:Soleil", "Met en fonction ~r~l'horloge")
+                        ExecuteCommand('weathersync')
+                        TriggerServerEvent("rxwMenuAdmin:Soleil", "Desactiver/Activer ~r~l'horloge")
                         cooldown = true
                         Citizen.SetTimeout(10000, function()
                             cooldown = false
@@ -921,9 +910,9 @@ function menuAdmin()
                     end
                 end)
 
-                RageUI.ButtonWithStyle("Heal", nil, {RightLabel = "→"},true, function(Hovered, Active, Selected)
+                RageUI.ButtonWithStyle("Soin/Nourriture", nil, {RightLabel = "→"},true, function(Hovered, Active, Selected)
                     if Selected then
-                        ESX.ShowNotification("~g~Heal en cours ("..GetPlayerName(GetPlayerFromServerId(reportSelected.idPlayer))..")")
+                        ESX.ShowNotification("~g~Soin en cours ("..GetPlayerName(GetPlayerFromServerId(reportSelected.idPlayer))..")")
                         TriggerServerEvent("rxwMenuAdmin:heal", reportSelected.idPlayer)
                     end
                 end)

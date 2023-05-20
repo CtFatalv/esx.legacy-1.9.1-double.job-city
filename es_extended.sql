@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : sam. 13 mai 2023 à 11:34
+-- Généré le : sam. 20 mai 2023 à 17:06
 -- Version du serveur : 10.11.2-MariaDB-1:10.11.2+maria~ubu2204
 -- Version de PHP : 8.1.18
 
@@ -259,6 +259,101 @@ CREATE TABLE `datastore_data` (
   `data` longtext DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Déchargement des données de la table `datastore_data`
+--
+
+INSERT INTO `datastore_data` (`id`, `name`, `owner`, `data`) VALUES
+(1, 'society_ambulance', NULL, '\'{}\''),
+(2, 'society_mechanic', NULL, '\'{}\''),
+(3, 'society_police', NULL, '\'{}\''),
+(4, 'society_shop01', NULL, '\'{}\''),
+(5, 'society_shop02', NULL, '\'{}\''),
+(6, 'society_shop03', NULL, '\'{}\''),
+(7, 'society_shop04', NULL, '\'{}\''),
+(8, 'society_shop05', NULL, '\'{}\''),
+(9, 'society_shop06', NULL, '\'{}\''),
+(10, 'society_shop07', NULL, '\'{}\''),
+(11, 'society_shop08', NULL, '\'{}\''),
+(12, 'society_shop09', NULL, '\'{}\''),
+(13, 'society_shop10', NULL, '\'{}\''),
+(14, 'society_taxi', NULL, '\'{}\''),
+(15, 'property', NULL, '{}'),
+(16, 'property', NULL, '{}'),
+(17, 'user_ears', 'char1:3069bd0212b6d515f7464a32ee0084ee0222d130', '{}'),
+(18, 'user_mask', 'char1:3069bd0212b6d515f7464a32ee0084ee0222d130', '{}'),
+(19, 'user_helmet', 'char1:3069bd0212b6d515f7464a32ee0084ee0222d130', '{}'),
+(20, 'user_glasses', 'char1:3069bd0212b6d515f7464a32ee0084ee0222d130', '{}'),
+(21, 'property', 'char1:3069bd0212b6d515f7464a32ee0084ee0222d130', '{}'),
+(22, 'property', NULL, '{}'),
+(23, 'property', NULL, '{}'),
+(24, 'property', NULL, '{}'),
+(25, 'property', NULL, '{}'),
+(26, 'property', NULL, '{}'),
+(27, 'property', NULL, '{}'),
+(28, 'property', NULL, '{}'),
+(29, 'property', NULL, '{}'),
+(30, 'property', NULL, '{}'),
+(31, 'property', NULL, '{}'),
+(32, 'property', NULL, '{}'),
+(33, 'property', NULL, '{}'),
+(34, 'property', NULL, '{}'),
+(35, 'property', NULL, '{}'),
+(36, 'property', NULL, '{}'),
+(37, 'property', NULL, '{}'),
+(38, 'property', NULL, '{}'),
+(39, 'property', NULL, '{}'),
+(40, 'property', NULL, '{}'),
+(41, 'property', NULL, '{}'),
+(42, 'property', NULL, '{}'),
+(43, 'property', NULL, '{}'),
+(44, 'property', NULL, '{}'),
+(45, 'property', NULL, '{}'),
+(46, 'property', NULL, '{}'),
+(47, 'property', NULL, '{}'),
+(48, 'property', NULL, '{}'),
+(49, 'property', NULL, '{}'),
+(50, 'property', NULL, '{}'),
+(51, 'property', NULL, '{}'),
+(52, 'property', NULL, '{}'),
+(53, 'property', NULL, '{}'),
+(54, 'property', NULL, '{}'),
+(55, 'property', NULL, '{}'),
+(56, 'property', NULL, '{}'),
+(57, 'property', NULL, '{}'),
+(58, 'property', NULL, '{}'),
+(59, 'property', NULL, '{}'),
+(60, 'property', NULL, '{}'),
+(61, 'property', NULL, '{}'),
+(62, 'property', NULL, '{}'),
+(63, 'property', NULL, '{}'),
+(64, 'property', NULL, '{}'),
+(65, 'property', NULL, '{}'),
+(66, 'property', NULL, '{}'),
+(67, 'property', NULL, '{}'),
+(68, 'property', NULL, '{}'),
+(69, 'property', NULL, '{}'),
+(70, 'property', NULL, '{}'),
+(71, 'property', NULL, '{}'),
+(72, 'property', NULL, '{}'),
+(73, 'property', NULL, '{}'),
+(74, 'property', NULL, '{}'),
+(75, 'user_mask', 'char1:cad1f8b3b912fb6a61e9a9451d29099419310b10', '{}'),
+(76, 'property', 'char1:cad1f8b3b912fb6a61e9a9451d29099419310b10', '{}'),
+(77, 'user_glasses', 'char1:cad1f8b3b912fb6a61e9a9451d29099419310b10', '{}'),
+(78, 'user_ears', 'char1:cad1f8b3b912fb6a61e9a9451d29099419310b10', '{}'),
+(79, 'user_helmet', 'char1:cad1f8b3b912fb6a61e9a9451d29099419310b10', '{}'),
+(80, 'property', NULL, '{}'),
+(81, 'property', NULL, '{}'),
+(82, 'property', NULL, '{}'),
+(83, 'property', NULL, '{}'),
+(84, 'property', NULL, '{}'),
+(85, 'property', NULL, '{}'),
+(86, 'property', NULL, '{}'),
+(87, 'property', NULL, '{}'),
+(88, 'property', NULL, '{}'),
+(89, 'property', NULL, '{}');
+
 -- --------------------------------------------------------
 
 --
@@ -497,12 +592,13 @@ CREATE TABLE `multicharacter_slots` (
 
 CREATE TABLE `owned_vehicles` (
   `owner` varchar(46) DEFAULT NULL,
-  `plate` varchar(12) NOT NULL,
-  `vehicle` longtext DEFAULT NULL,
-  `type` varchar(20) NOT NULL DEFAULT 'car',
-  `job` varchar(20) DEFAULT NULL,
-  `stored` tinyint(4) NOT NULL DEFAULT 0,
-  `parking` varchar(60) DEFAULT NULL,
+  `plate` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `vehicle` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'car',
+  `job` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stored` tinyint(1) DEFAULT NULL,
+  `parking` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `peopleWithKeys` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '[]',
   `pound` varchar(60) DEFAULT NULL,
   `mileage` float DEFAULT 0,
   `glovebox` longtext DEFAULT NULL,
@@ -1199,7 +1295,7 @@ ALTER TABLE `billing`
 -- AUTO_INCREMENT pour la table `datastore_data`
 --
 ALTER TABLE `datastore_data`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT pour la table `fine_types`
